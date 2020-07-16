@@ -1,0 +1,9 @@
+C:\Users\Clame\Desktop\FtpBackup\FtpBackupProject\bin\Debug\FtpBackupProject.exe.config
+C:\Users\Clame\Desktop\FtpBackup\FtpBackupProject\bin\Debug\FtpBackupProject.exe
+C:\Users\Clame\Desktop\FtpBackup\FtpBackupProject\bin\Debug\FtpBackupProject.pdb
+C:\Users\Clame\Desktop\FtpBackup\FtpBackupProject\obj\Debug\FtpBackupProject.csprojAssemblyReference.cache
+C:\Users\Clame\Desktop\FtpBackup\FtpBackupProject\obj\Debug\FtpBackupProject.Properties.Resources.resources
+C:\Users\Clame\Desktop\FtpBackup\FtpBackupProject\obj\Debug\FtpBackupProject.csproj.GenerateResource.cache
+C:\Users\Clame\Desktop\FtpBackup\FtpBackupProject\obj\Debug\FtpBackupProject.csproj.CoreCompileInputs.cache
+C:\Users\Clame\Desktop\FtpBackup\FtpBackupProject\obj\Debug\FtpBackupProject.exe
+C:\Users\Clame\Desktop\FtpBackup\FtpBackupProject\obj\Debug\FtpBackupProject.pdb

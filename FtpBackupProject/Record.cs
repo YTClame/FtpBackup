@@ -35,8 +35,6 @@ namespace FtpBackupProject
         [JsonIgnore]
         public bool isOnline;
         [JsonIgnore]
-        public int connectedStatus;
-        [JsonIgnore]
         public FtpClient ftpClient;
 
         public Record(string IP, int port, string login, string password, string name)
@@ -47,7 +45,6 @@ namespace FtpBackupProject
             this.password = password;
             this.name = name;
             this.filesAndDirs = new List<FileAndDirInfo>();
-            connectedStatus = 0;
         }
 
         public void RemoveFileOrDir(string path)

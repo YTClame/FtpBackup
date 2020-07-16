@@ -40,22 +40,6 @@ namespace FtpBackupProject
             SetStatus("Попытка подключения к " + rec.IP + ":" + rec.port.ToString() + "..");
             SetInputsEnabled(false);
             WorkWithFTP.ConnectToFTP(rec, this);
-            /**
-            if (rec.isOnline)
-            {
-                SetStatus("Подключено успешно, сканирование файлов...");
-                TreeNode tree = WorkWithFTP.getAllFilesAndDirs(rec);
-                treeView1.Nodes.Add(tree);
-                SetStatus("Ожидание выбора файлов и папок для создания резервных копий");
-                panelConn.Visible = false;
-                panelSet.Visible = true;
-            }
-            else
-            {
-                SetStatus("Ошибка подключения");
-                SetInputsEnabled(true);
-            }
-            **/
         }
         public void ConnectionResult(bool Res)
         {
@@ -123,6 +107,12 @@ namespace FtpBackupProject
                 rec.RemoveFileOrDir(pathString);
                 listBox1.Items.Remove(pathString);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            folderBrowserDialog1.ShowDialog();
+            labelFolderPath.Text = folderBrowserDialog1.SelectedPath;
         }
     }
 }

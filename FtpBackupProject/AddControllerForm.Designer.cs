@@ -44,7 +44,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.treeView1 = new CustomTreeView();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.label6 = new System.Windows.Forms.Label();
             this.panelConn = new System.Windows.Forms.Panel();
@@ -300,7 +300,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel statusLabel;
-        private System.Windows.Forms.TreeView treeView1;
+        private CustomTreeView treeView1;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.TextBox textBoxName;
         private System.Windows.Forms.Label label5;

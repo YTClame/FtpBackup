@@ -1,1 +1,1 @@
-[{"IP":"127.0.0.1","port":25565,"login":"Clame","password":"qwerty"},{"IP":"192.168.0.1","port":25565,"login":"Clame2","password":"qwerty2"},{"IP":"10.0.0.2","port":25565,"login":"Clame3","password":"qwerty3"}]
+{"t":true,"f":false,"check":"строчка"}

@@ -33,9 +33,10 @@ namespace FtpBackupProject
             textBoxName.Enabled = isEnabled;
         }
 
+        private Record rec;
         private void buttonConnect_Click(object sender, EventArgs e)
         {
-            Record rec = new Record(textBoxIP.Text, Convert.ToInt32(textBoxPort.Text), textBoxLogin.Text, textBoxPassword.Text, textBoxName.Text);
+            rec = new Record(textBoxIP.Text, Convert.ToInt32(textBoxPort.Text), textBoxLogin.Text, textBoxPassword.Text, textBoxName.Text);
             SetStatus("Попытка подключения к " + rec.IP + ":" + rec.port.ToString());
             SetInputsEnabled(false);
             WorkWithFTP.ConnectToFTP(rec);
@@ -59,19 +60,45 @@ namespace FtpBackupProject
         {
             Stack<string> path = new Stack<string>();
             TreeNode tn = e.Node;
-            while (tn != null)
+            while (tn.Parent != null)
             {
                 path.Push(tn.Text);
                 tn = tn.Parent;
             }
-            string pathString = "";
+            string pathString = "./";
+            List<string> partsPath = new List<string>();
             foreach (string s in path)
             {
                 pathString += s + "/";
+                partsPath.Add(s);
             }
-            if (e.Node.ImageIndex == 0) pathString += "*";
-            if (e.Node.ImageIndex == 1) pathString = pathString.Remove(pathString.Length - 1);
-            listBox1.Items.Add(pathString);
+            if (e.Node.Checked)
+            {
+                if (e.Node.ImageIndex == 0)
+                {
+                    pathString += "*";
+                    rec.filesAndDirs.Add(new FileAndDirInfo(partsPath, true, pathString));
+                }
+                if (e.Node.ImageIndex == 1)
+                {
+                    pathString = pathString.Remove(pathString.Length - 1);
+                    rec.filesAndDirs.Add(new FileAndDirInfo(partsPath, false, pathString));
+                }
+                listBox1.Items.Add(pathString);
+            }
+            else
+            {
+                if (e.Node.ImageIndex == 0)
+                {
+                    pathString += "*";
+                }
+                if (e.Node.ImageIndex == 1)
+                {
+                    pathString = pathString.Remove(pathString.Length - 1);
+                }
+                rec.RemoveFileOrDir(pathString);
+                listBox1.Items.Remove(pathString);
+            }
         }
     }
 }

@@ -59,6 +59,9 @@
     <Compile Include="AddControllerForm.Designer.cs">
       <DependentUpon>AddControllerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CustomTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

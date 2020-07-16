@@ -18,6 +18,7 @@ namespace FtpBackupProject
             {
                 rec.ftpClient.ConnectTimeout = 5000;
                 rec.ftpClient.Connect();
+                //rec.ftpClient.DownloadDirectory(@"E:\website\logs\", @"/", FtpFolderSyncMode.Update);
                 if (rec.ftpClient.IsConnected)
                 {
                     rec.isOnline = true;

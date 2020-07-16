@@ -11,14 +11,15 @@ namespace FtpBackupProject
 {
     public class WorkWithFTP
     {
-        public static void ConnectToFTP(Record rec)
+        public static async void ConnectToFTP(Record rec, AddControllerForm acf)
         {
             rec.ftpClient = new FtpClient(rec.IP, rec.port, new System.Net.NetworkCredential(rec.login, rec.password));
             try
             {
                 rec.ftpClient.ConnectTimeout = 5000;
-                rec.ftpClient.Connect();
+                await rec.ftpClient.ConnectAsync();
                 //rec.ftpClient.DownloadDirectory(@"E:\website\logs\", @"/", FtpFolderSyncMode.Update);
+
                 if (rec.ftpClient.IsConnected)
                 {
                     rec.isOnline = true;
@@ -27,24 +28,29 @@ namespace FtpBackupProject
                 {
                     rec.isOnline = false;
                 }
+                acf.ConnectionResult(rec.isOnline);
             }
             catch
             {
                 rec.isOnline = false;
+                acf.ConnectionResult(rec.isOnline);
             }
         }
 
-        public static TreeNode getAllFilesAndDirs(Record rec)
+        public static async void getAllFilesAndDirs(Record rec, AddControllerForm acf)
         {
             folders = new Queue<FolderInfo>();
             TreeNode tree = new TreeNode(rec.name);
             folders.Enqueue(new FolderInfo("", tree, null));
-            while (folders.Count > 0)
+            await Task.Run(() =>
             {
-                FolderInfo fi = folders.Dequeue();
-                CheckDirectory(rec, fi.fullDir, fi.node);
-            }
-            return tree;
+                while (folders.Count > 0)
+                {
+                    FolderInfo fi = folders.Dequeue();
+                    CheckDirectory(rec, fi.fullDir, fi.node);
+                }
+            });
+            acf.SetTreeNode(tree);
         }
 
         private static Queue<FolderInfo> folders;
@@ -61,7 +67,7 @@ namespace FtpBackupProject
                 if (item.Type == FtpFileSystemObjectType.Directory)
                 {
                     TreeNode tempFolderNode = new TreeNode(item.Name, 0, 0);
-                    if(parent != null) parent.Nodes.Add(tempFolderNode);
+                    if (parent != null) parent.Nodes.Add(tempFolderNode);
                     folders.Enqueue(new FolderInfo(item.FullName, tempFolderNode, parent));
                 }
             }

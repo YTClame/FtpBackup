@@ -44,13 +44,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.treeView1 = new CustomTreeView();
+            this.treeView1 = new FtpBackupProject.CustomTreeView();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.label6 = new System.Windows.Forms.Label();
             this.panelConn = new System.Windows.Forms.Panel();
             this.panelSet = new System.Windows.Forms.Panel();
-            this.label7 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panelConn.SuspendLayout();
@@ -201,7 +201,7 @@
             this.treeView1.Location = new System.Drawing.Point(3, 46);
             this.treeView1.Name = "treeView1";
             this.treeView1.SelectedImageIndex = 0;
-            this.treeView1.Size = new System.Drawing.Size(335, 268);
+            this.treeView1.Size = new System.Drawing.Size(365, 268);
             this.treeView1.TabIndex = 2;
             this.treeView1.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterCheck);
             // 
@@ -216,7 +216,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label6.Location = new System.Drawing.Point(32, 3);
+            this.label6.Location = new System.Drawing.Point(51, 3);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(273, 32);
             this.label6.TabIndex = 3;
@@ -243,6 +243,16 @@
             this.panelSet.TabIndex = 5;
             this.panelSet.Visible = false;
             // 
+            // listBox1
+            // 
+            this.listBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 18;
+            this.listBox1.Location = new System.Drawing.Point(390, 46);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(472, 112);
+            this.listBox1.TabIndex = 5;
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -253,16 +263,6 @@
             this.label7.TabIndex = 4;
             this.label7.Text = "Выбранные файлы и директории:";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // listBox1
-            // 
-            this.listBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 18;
-            this.listBox1.Location = new System.Drawing.Point(403, 46);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(433, 112);
-            this.listBox1.TabIndex = 5;
             // 
             // AddControllerForm
             // 

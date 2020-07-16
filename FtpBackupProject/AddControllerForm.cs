@@ -19,7 +19,7 @@ namespace FtpBackupProject
             SetStatus("Ожидание попытки подключения");
         }
 
-        private void SetStatus(string status)
+        public void SetStatus(string status)
         {
             statusLabel.Text = "Статус: " + status + ".";
         }
@@ -37,9 +37,10 @@ namespace FtpBackupProject
         private void buttonConnect_Click(object sender, EventArgs e)
         {
             rec = new Record(textBoxIP.Text, Convert.ToInt32(textBoxPort.Text), textBoxLogin.Text, textBoxPassword.Text, textBoxName.Text);
-            SetStatus("Попытка подключения к " + rec.IP + ":" + rec.port.ToString());
+            SetStatus("Попытка подключения к " + rec.IP + ":" + rec.port.ToString() + "..");
             SetInputsEnabled(false);
-            WorkWithFTP.ConnectToFTP(rec);
+            WorkWithFTP.ConnectToFTP(rec, this);
+            /**
             if (rec.isOnline)
             {
                 SetStatus("Подключено успешно, сканирование файлов...");
@@ -54,6 +55,29 @@ namespace FtpBackupProject
                 SetStatus("Ошибка подключения");
                 SetInputsEnabled(true);
             }
+            **/
+        }
+        public void ConnectionResult(bool Res)
+        {
+            if (Res)
+            {
+                SetStatus("Подключено успешно, сканирование файлов..");
+                WorkWithFTP.getAllFilesAndDirs(rec, this);
+            }
+            else
+            {
+                SetStatus("Ошибка подключения или авторизации");
+                SetInputsEnabled(true);
+            }
+        }
+
+        public void SetTreeNode(TreeNode tn)
+        {
+            TreeNode tree = tn;
+            treeView1.Nodes.Add(tree);
+            SetStatus("Ожидание выбора файлов и папок для создания резервных копий");
+            panelConn.Visible = false;
+            panelSet.Visible = true;
         }
 
         private void treeView1_AfterCheck(object sender, TreeViewEventArgs e)

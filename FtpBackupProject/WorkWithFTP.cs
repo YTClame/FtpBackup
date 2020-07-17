@@ -2,6 +2,7 @@
 using FluentFTP.Proxy;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -35,6 +36,80 @@ namespace FtpBackupProject
                 rec.isOnline = false;
                 acf.ConnectionResult(rec.isOnline);
             }
+        }
+
+        public static async void DownloadWithMainForm(Record rec, MainForm mf, bool isBackgroundDownload)
+        {
+            bool isConnected = true;
+            await Task.Run(() =>
+            {
+                try
+                {
+                    ConnectToFTP(rec);
+                }
+                catch
+                {
+                    isConnected = false;
+                }
+            });
+            if (isConnected)
+            {
+                if (!isBackgroundDownload)
+                {
+                    mf.SetStatus("Соединение установлено, скачивание..", Color.DarkGreen);
+                }
+                await Task.Run(() =>
+                {
+                    DownloadLocal(rec);
+                });
+                if (!isBackgroundDownload)
+                {
+                    mf.SetStatus("Загрузка завершена", Color.DarkGreen);
+                    mf.BlockButtons(false);
+                }
+            }
+            else
+            {
+                if (!isBackgroundDownload)
+                {
+                    mf.SetStatus("Ошибка соединения", Color.Red);
+                    mf.BlockButtons(false);
+                }
+            }
+        }
+
+        public static void ConnectToFTP(Record rec)
+        {
+            rec.ftpClient = new FtpClient(rec.IP, rec.port, new System.Net.NetworkCredential(rec.login, rec.password));
+            rec.ftpClient.Connect();
+        }
+
+        public static void DownloadLocal(Record rec)
+        {
+            string dir = rec.folderPath + rec.name + "\\" + DateTime.Now.ToString().Replace(':', '.');
+            Directory.CreateDirectory(dir);
+            foreach (FileAndDirInfo fi in rec.filesAndDirs)
+            {
+                string pathOnFtp = "";
+                string dirTemp = dir;
+                foreach (string partPath in fi.pathParts)
+                {
+                    pathOnFtp += "/" + partPath;
+                    dirTemp += "\\" + partPath;
+                }
+                if (pathOnFtp.Equals("")) pathOnFtp = "/";
+                if (fi.isFolder)
+                {
+                    rec.ftpClient.DownloadDirectory(dirTemp, pathOnFtp, FtpFolderSyncMode.Update);
+                }
+                else
+                {
+                    rec.ftpClient.DownloadFile(dirTemp, pathOnFtp);
+                }
+            }
+            rec.ftpClient.Disconnect();
+            rec.isOnline = false;
+            SaveClass.SaveAll();
         }
 
         public static async void Download(Record rec, AddControllerForm acf)

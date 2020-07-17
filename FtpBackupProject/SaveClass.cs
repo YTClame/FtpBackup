@@ -22,6 +22,7 @@ namespace FtpBackupProject
             {
                 StreamReader sr = new StreamReader("settings.json");
                 GlobalVars.records = JsonConvert.DeserializeObject<List<Record>>(sr.ReadToEnd());
+                sr.Close();
             }
             catch
             {

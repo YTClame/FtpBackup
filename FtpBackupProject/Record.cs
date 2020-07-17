@@ -64,5 +64,14 @@ namespace FtpBackupProject
                 }
             }
         }
+
+        public static Record findRecordForName(string name)
+        {
+            foreach(Record rec in GlobalVars.records)
+            {
+                if (rec.name.Equals(name)) return rec;
+            }
+            return null;
+        }
     }
 }

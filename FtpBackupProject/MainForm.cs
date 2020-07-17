@@ -18,19 +18,27 @@ namespace FtpBackupProject
         public MainForm()
         {
             InitializeComponent();
-            /**
-            StreamWriter sw = new StreamWriter("temp.txt");
-            sw.Write(JsonConvert.SerializeObject(a));
-            sw.Close();
+            SaveClass.LoadAll();
+            UpdateList();
+        }
 
-            StreamReader sr = new StreamReader("temp.txt");
-            A a2 = JsonConvert.DeserializeObject<A>(sr.ReadToEnd());
-            **/
+        public void UpdateList()
+        {
+            listBox1.Items.Clear();
+            foreach(Record rec in GlobalVars.records)
+            {
+                listBox1.Items.Add(rec.name);
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            new AddControllerForm().ShowDialog();
+            new AddControllerForm(this).ShowDialog();
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            SaveClass.SaveAll();
         }
     }
 }

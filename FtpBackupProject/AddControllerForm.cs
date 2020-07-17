@@ -13,10 +13,12 @@ namespace FtpBackupProject
 {
     public partial class AddControllerForm : Form
     {
-        public AddControllerForm()
+        private MainForm mainform;
+        public AddControllerForm(MainForm mf)
         {
             InitializeComponent();
             SetStatus("Ожидание попытки подключения");
+            mainform = mf;
         }
 
         public void SetStatus(string status)
@@ -36,8 +38,23 @@ namespace FtpBackupProject
         private Record rec;
         private void buttonConnect_Click(object sender, EventArgs e)
         {
-            rec = new Record(textBoxIP.Text, Convert.ToInt32(textBoxPort.Text), textBoxLogin.Text, textBoxPassword.Text, textBoxName.Text);
-            SetStatus("Попытка подключения к " + rec.IP + ":" + rec.port.ToString() + "..");
+            string name = textBoxName.Text;
+            name.Trim(new char[] { ' ' });
+            if (name.Contains('\\') || name.Contains('/') || name.Contains(':') || name.Contains('*') || name.Contains('?') || name.Contains('\"') || name.Contains('\'') || name.Contains('<') || name.Contains('>') || name.Contains('+') || name.Contains('|') || name.Contains('%') || name.Contains('!') || name.Contains('@'))
+            {
+                SetStatus("Имя не должно содержать символы: \\ / : * ? \" \' < > + | % ! #");
+                return;
+            }
+            foreach (Record r in GlobalVars.records)
+            {
+                if (r.name.Equals(name))
+                {
+                    SetStatus("Такое имя уже существует в вашей базе! Введите уникальное");
+                    return;
+                }
+            }
+            rec = new Record(textBoxIP.Text, Convert.ToInt32(textBoxPort.Text), textBoxLogin.Text, textBoxPassword.Text, name);
+            SetStatus("Попытка подключения к " + name + "..");
             SetInputsEnabled(false);
             WorkWithFTP.ConnectToFTP(rec, this);
         }
@@ -113,6 +130,79 @@ namespace FtpBackupProject
         {
             folderBrowserDialog1.ShowDialog();
             labelFolderPath.Text = folderBrowserDialog1.SelectedPath;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            int hours;
+            int minuts;
+            int seconds;
+            try
+            {
+                hours = Convert.ToInt32(textBoxHours.Text);
+                minuts = Convert.ToInt32(textBoxMinuts.Text);
+                seconds = Convert.ToInt32(textBoxSeconds.Text);
+                if (hours < 0 || minuts < 0 || seconds < 0) throw new Exception("lowtozero");
+                if (hours == 0 && minuts == 0 && seconds == 0) throw new Exception("alleqzero");
+                if (folderBrowserDialog1.SelectedPath == "") throw new Exception("folder");
+            }
+            catch(Exception exc)
+            {
+                if(exc.Message == "folder")
+                {
+                    SetStatus("Выберите папку для сохранения копий");
+                }
+                else if(exc.Message == "lowtozero")
+                {
+                    SetStatus("Период имеет отрицательное значение. Введите корректный период");
+                }
+                else if(exc.Message == "alleqzero")
+                {
+                    SetStatus("Период не может быть нулевым");
+                }
+                else
+                {
+                    SetStatus("Некорректные введённые данные");
+                }
+                return;
+            }
+            button2.Enabled = false;
+            button1.Enabled = false;
+            treeView1.Enabled = false;
+            textBoxHours.Enabled = false;
+            textBoxMinuts.Enabled = false;
+            textBoxSeconds.Enabled = false;
+            DateTime dt = DateTime.Now;
+            dt = dt.AddHours(hours);
+            dt = dt.AddMinutes(minuts);
+            dt = dt.AddSeconds(seconds);
+            rec.nextSaveDateTime = dt;
+            string folderpath = folderBrowserDialog1.SelectedPath;
+            if (folderpath.ToCharArray()[folderpath.Length-1] == '\\')
+            {
+                rec.folderPath = folderpath;
+            }
+            else
+            {
+                rec.folderPath = folderpath + "\\";
+            }
+            rec.periodH = hours;
+            rec.periodM = minuts;
+            rec.periodS = seconds;
+            GlobalVars.records.Add(rec);
+            mainform.UpdateList();
+            if (checkBox1.Checked)
+            {
+                WorkWithFTP.Download(rec, this);
+                SetStatus("Создание копии..");
+            }
+            else
+            {
+                rec.ftpClient.Disconnect();
+                rec.isOnline = false;
+                SaveClass.SaveAll();
+                Close();
+            }
         }
     }
 }

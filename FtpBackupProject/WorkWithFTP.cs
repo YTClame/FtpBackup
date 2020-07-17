@@ -2,6 +2,7 @@
 using FluentFTP.Proxy;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,6 @@ namespace FtpBackupProject
             {
                 rec.ftpClient.ConnectTimeout = 5000;
                 await rec.ftpClient.ConnectAsync();
-                //rec.ftpClient.DownloadDirectory(@"E:\website\logs\", @"/", FtpFolderSyncMode.Update);
 
                 if (rec.ftpClient.IsConnected)
                 {
@@ -37,10 +37,42 @@ namespace FtpBackupProject
             }
         }
 
+        public static async void Download(Record rec, AddControllerForm acf)
+        {
+            string dir = rec.folderPath + rec.name + "\\" + DateTime.Now.ToString().Replace(':', '.');
+            Directory.CreateDirectory(dir);
+            await Task.Run(() =>
+            {
+                foreach(FileAndDirInfo fi in rec.filesAndDirs)
+                {
+                    string pathOnFtp = "";
+                    string dirTemp = dir;
+                    foreach(string partPath in fi.pathParts)
+                    {
+                        pathOnFtp += "/" + partPath;
+                        dirTemp += "\\" + partPath;
+                    }
+                    if (pathOnFtp.Equals("")) pathOnFtp = "/";
+                    if (fi.isFolder)
+                    {
+                        rec.ftpClient.DownloadDirectory(dirTemp, pathOnFtp, FtpFolderSyncMode.Update);
+                    }
+                    else
+                    {
+                        rec.ftpClient.DownloadFile(dirTemp, pathOnFtp);
+                    }
+                }
+            });
+            rec.ftpClient.Disconnect();
+            rec.isOnline = false;
+            SaveClass.SaveAll();
+            acf.Close();
+        }
+
         public static async void getAllFilesAndDirs(Record rec, AddControllerForm acf)
         {
             folders = new Queue<FolderInfo>();
-            TreeNode tree = new TreeNode(rec.name);
+            TreeNode tree = new TreeNode(rec.name, 0, 0);
             folders.Enqueue(new FolderInfo("", tree, null));
             await Task.Run(() =>
             {

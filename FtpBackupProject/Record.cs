@@ -30,6 +30,11 @@ namespace FtpBackupProject
         public string password;
         public string name;
         public List<FileAndDirInfo> filesAndDirs;
+        public DateTime nextSaveDateTime;
+        public string folderPath;
+        public int periodH;
+        public int periodM;
+        public int periodS;
         
 
         [JsonIgnore]

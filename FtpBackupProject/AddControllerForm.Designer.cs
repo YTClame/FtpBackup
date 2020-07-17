@@ -49,23 +49,23 @@
             this.label6 = new System.Windows.Forms.Label();
             this.panelConn = new System.Windows.Forms.Panel();
             this.panelSet = new System.Windows.Forms.Panel();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.labelFolderPath = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.textBoxSeconds = new System.Windows.Forms.TextBox();
+            this.textBoxMinuts = new System.Windows.Forms.TextBox();
+            this.textBoxHours = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.textBoxHours = new System.Windows.Forms.TextBox();
-            this.textBoxMinuts = new System.Windows.Forms.TextBox();
-            this.textBoxSeconds = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.labelFolderPath = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.button2 = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panelConn.SuspendLayout();
@@ -272,6 +272,157 @@
             this.panelSet.TabIndex = 5;
             this.panelSet.Visible = false;
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.checkBox1.Location = new System.Drawing.Point(451, 296);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(342, 20);
+            this.checkBox1.TabIndex = 19;
+            this.checkBox1.Text = "Сделать первую копию сразу после сохранения";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button2.Location = new System.Drawing.Point(483, 254);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(283, 33);
+            this.button2.TabIndex = 18;
+            this.button2.Text = "Сохранить настройки";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(632, 193);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(124, 23);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "Выбрать папку";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // labelFolderPath
+            // 
+            this.labelFolderPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelFolderPath.Location = new System.Drawing.Point(372, 223);
+            this.labelFolderPath.Name = "labelFolderPath";
+            this.labelFolderPath.Size = new System.Drawing.Size(488, 16);
+            this.labelFolderPath.TabIndex = 16;
+            this.labelFolderPath.Text = "<путь до папки>";
+            this.labelFolderPath.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label14.Location = new System.Drawing.Point(452, 196);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(174, 16);
+            this.label14.TabIndex = 15;
+            this.label14.Text = "Сохранять копии в папку:";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label13.Location = new System.Drawing.Point(728, 170);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(54, 16);
+            this.label13.TabIndex = 14;
+            this.label13.Text = "секунд";
+            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label12.Location = new System.Drawing.Point(650, 170);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(48, 16);
+            this.label12.TabIndex = 13;
+            this.label12.Text = "минут";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label11.Location = new System.Drawing.Point(570, 170);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(47, 16);
+            this.label11.TabIndex = 12;
+            this.label11.Text = "часов";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label10.Location = new System.Drawing.Point(708, 145);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(14, 20);
+            this.label10.TabIndex = 11;
+            this.label10.Text = ":";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label9.Location = new System.Drawing.Point(628, 145);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(14, 20);
+            this.label9.TabIndex = 10;
+            this.label9.Text = ":";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // textBoxSeconds
+            // 
+            this.textBoxSeconds.Location = new System.Drawing.Point(725, 147);
+            this.textBoxSeconds.MaxLength = 4;
+            this.textBoxSeconds.Name = "textBoxSeconds";
+            this.textBoxSeconds.Size = new System.Drawing.Size(57, 20);
+            this.textBoxSeconds.TabIndex = 9;
+            this.textBoxSeconds.Text = "0";
+            this.textBoxSeconds.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // textBoxMinuts
+            // 
+            this.textBoxMinuts.Location = new System.Drawing.Point(645, 147);
+            this.textBoxMinuts.MaxLength = 4;
+            this.textBoxMinuts.Name = "textBoxMinuts";
+            this.textBoxMinuts.Size = new System.Drawing.Size(57, 20);
+            this.textBoxMinuts.TabIndex = 8;
+            this.textBoxMinuts.Text = "10";
+            this.textBoxMinuts.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // textBoxHours
+            // 
+            this.textBoxHours.Location = new System.Drawing.Point(565, 147);
+            this.textBoxHours.MaxLength = 5;
+            this.textBoxHours.Name = "textBoxHours";
+            this.textBoxHours.Size = new System.Drawing.Size(57, 20);
+            this.textBoxHours.TabIndex = 7;
+            this.textBoxHours.Text = "0";
+            this.textBoxHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label8.Location = new System.Drawing.Point(423, 148);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(137, 16);
+            this.label8.TabIndex = 6;
+            this.label8.Text = "Делать копию раз в";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // listBox1
             // 
             this.listBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -293,156 +444,6 @@
             this.label7.Text = "Выбранные файлы и директории:";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label8.Location = new System.Drawing.Point(423, 148);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(137, 16);
-            this.label8.TabIndex = 6;
-            this.label8.Text = "Делать копию раз в";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // textBoxHours
-            // 
-            this.textBoxHours.Location = new System.Drawing.Point(565, 147);
-            this.textBoxHours.MaxLength = 5;
-            this.textBoxHours.Name = "textBoxHours";
-            this.textBoxHours.Size = new System.Drawing.Size(57, 20);
-            this.textBoxHours.TabIndex = 7;
-            this.textBoxHours.Text = "0";
-            this.textBoxHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // textBoxMinuts
-            // 
-            this.textBoxMinuts.Location = new System.Drawing.Point(645, 147);
-            this.textBoxMinuts.MaxLength = 4;
-            this.textBoxMinuts.Name = "textBoxMinuts";
-            this.textBoxMinuts.Size = new System.Drawing.Size(57, 20);
-            this.textBoxMinuts.TabIndex = 8;
-            this.textBoxMinuts.Text = "10";
-            this.textBoxMinuts.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // textBoxSeconds
-            // 
-            this.textBoxSeconds.Location = new System.Drawing.Point(725, 147);
-            this.textBoxSeconds.MaxLength = 4;
-            this.textBoxSeconds.Name = "textBoxSeconds";
-            this.textBoxSeconds.Size = new System.Drawing.Size(57, 20);
-            this.textBoxSeconds.TabIndex = 9;
-            this.textBoxSeconds.Text = "0";
-            this.textBoxSeconds.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label9.Location = new System.Drawing.Point(628, 145);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(14, 20);
-            this.label9.TabIndex = 10;
-            this.label9.Text = ":";
-            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label10.Location = new System.Drawing.Point(708, 145);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(14, 20);
-            this.label10.TabIndex = 11;
-            this.label10.Text = ":";
-            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label11.Location = new System.Drawing.Point(570, 170);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(47, 16);
-            this.label11.TabIndex = 12;
-            this.label11.Text = "часов";
-            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label12.Location = new System.Drawing.Point(650, 170);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(48, 16);
-            this.label12.TabIndex = 13;
-            this.label12.Text = "минут";
-            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label13.Location = new System.Drawing.Point(728, 170);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(54, 16);
-            this.label13.TabIndex = 14;
-            this.label13.Text = "секунд";
-            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label14.Location = new System.Drawing.Point(452, 196);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(174, 16);
-            this.label14.TabIndex = 15;
-            this.label14.Text = "Сохранять копии в папку:";
-            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelFolderPath
-            // 
-            this.labelFolderPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelFolderPath.Location = new System.Drawing.Point(372, 223);
-            this.labelFolderPath.Name = "labelFolderPath";
-            this.labelFolderPath.Size = new System.Drawing.Size(488, 16);
-            this.labelFolderPath.TabIndex = 16;
-            this.labelFolderPath.Text = "<путь до папки>";
-            this.labelFolderPath.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(632, 193);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(124, 23);
-            this.button1.TabIndex = 17;
-            this.button1.Text = "Выбрать папку";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button2
-            // 
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.Location = new System.Drawing.Point(483, 254);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(283, 33);
-            this.button2.TabIndex = 18;
-            this.button2.Text = "Сохранить настройки";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBox1.Location = new System.Drawing.Point(451, 296);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(342, 20);
-            this.checkBox1.TabIndex = 19;
-            this.checkBox1.Text = "Сделать первую копию сразу после сохранения";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
             // AddControllerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -451,8 +452,12 @@
             this.Controls.Add(this.panelSet);
             this.Controls.Add(this.panelConn);
             this.Controls.Add(this.statusStrip1);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(936, 405);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(936, 405);
             this.Name = "AddControllerForm";
-            this.Text = "AddControllerForm";
+            this.Text = "Добавить и настроить контроллер";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);

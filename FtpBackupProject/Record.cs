@@ -39,9 +39,6 @@ namespace FtpBackupProject
         public int periodM;
         public int periodS;
         
-
-        [JsonIgnore]
-        public bool isOnline;
         [JsonIgnore]
         public FtpClient ftpClient;
 

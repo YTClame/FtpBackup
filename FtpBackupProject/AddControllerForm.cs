@@ -199,7 +199,6 @@ namespace FtpBackupProject
             else
             {
                 rec.ftpClient.Disconnect();
-                rec.isOnline = false;
                 SaveClass.SaveAll();
                 Close();
             }

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -20,21 +21,31 @@ namespace FtpBackupProject
             {
                 rec.ftpClient.ConnectTimeout = 5000;
                 await rec.ftpClient.ConnectAsync();
-
-                if (rec.ftpClient.IsConnected)
-                {
-                    rec.isOnline = true;
-                }
-                else
-                {
-                    rec.isOnline = false;
-                }
-                acf.ConnectionResult(rec.isOnline);
+                acf.ConnectionResult(rec.ftpClient.IsConnected);
             }
             catch
             {
-                rec.isOnline = false;
-                acf.ConnectionResult(rec.isOnline);
+                acf.ConnectionResult(false);
+            }
+        }
+
+        public static void AutoDownload()
+        {
+            while (true)
+            {
+                Thread.Sleep(700);
+                foreach (Record rec in GlobalVars.records)
+                {
+                    if (rec.nextSaveDateTime < DateTime.Now)
+                    {
+                        DateTime dt = DateTime.Now;
+                        dt = dt.AddHours(rec.periodH);
+                        dt = dt.AddMinutes(rec.periodM);
+                        dt = dt.AddSeconds(rec.periodS);
+                        rec.nextSaveDateTime = dt;
+                        DownloadWithMainForm(rec, null, true);
+                    }
+                }
             }
         }
 
@@ -86,21 +97,19 @@ namespace FtpBackupProject
 
         public static async void ConnectToFtpAsync(Record rec, MainForm mf)
         {
-            rec.isOnline = false;
             rec.ftpClient = new FtpClient(rec.IP, rec.port, new System.Net.NetworkCredential(rec.login, rec.password));
             await Task.Run(() =>
             {
                 try
                 {
                     rec.ftpClient.Connect();
-                    rec.isOnline = true;
                 }
                 catch
                 {
-                    rec.isOnline = false;
+
                 }
             });
-            if (rec.isOnline)
+            if (rec.ftpClient.IsConnected)
             {
                 mf.SetStatus("Подключено, сканирование директорий и файлов..", Color.Blue);
                 folders = new Queue<FolderInfo>();
@@ -191,17 +200,20 @@ namespace FtpBackupProject
                     dirTemp += "\\" + partPath;
                 }
                 if (pathOnFtp.Equals("")) pathOnFtp = "/";
+
                 if (fi.isFolder)
                 {
-                    rec.ftpClient.DownloadDirectory(dirTemp, pathOnFtp, FtpFolderSyncMode.Update);
+                    if(rec.ftpClient.DirectoryExists(pathOnFtp))
+                        rec.ftpClient.DownloadDirectory(dirTemp, pathOnFtp, FtpFolderSyncMode.Update);
                 }
                 else
                 {
-                    rec.ftpClient.DownloadFile(dirTemp, pathOnFtp);
+                    if(rec.ftpClient.FileExists(pathOnFtp))
+                        rec.ftpClient.DownloadFile(dirTemp, pathOnFtp);
                 }
+
             }
             rec.ftpClient.Disconnect();
-            rec.isOnline = false;
             SaveClass.SaveAll();
         }
 
@@ -232,7 +244,6 @@ namespace FtpBackupProject
                 }
             });
             rec.ftpClient.Disconnect();
-            rec.isOnline = false;
             SaveClass.SaveAll();
             acf.Close();
         }

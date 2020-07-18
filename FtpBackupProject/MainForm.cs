@@ -11,16 +11,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Threading;
 
 namespace FtpBackupProject
 {
     public partial class MainForm : Form
     {
+        private Thread autoDownload = null;
         public MainForm()
         {
             InitializeComponent();
             SaveClass.LoadAll();
             UpdateList();
+            autoDownload = new Thread(WorkWithFTP.AutoDownload);
+            autoDownload.Start();
         }
 
         public void UpdateList()
@@ -40,6 +44,7 @@ namespace FtpBackupProject
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             SaveClass.SaveAll();
+            autoDownload.Abort();
         }
 
         private int oldChoice = -2;
@@ -186,6 +191,11 @@ namespace FtpBackupProject
             BlockButtons(true);
             SetStatus("Подключение..", Color.Blue);
             WorkWithFTP.ConnectToFtpAsync(rec, this);
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if(rec != null) label4.Text = "Следующее сохранение в " + rec.nextSaveDateTime.ToString();
         }
     }
 }

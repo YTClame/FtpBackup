@@ -105,6 +105,8 @@ namespace FtpBackupProject
                 mf.SetStatus("Подключено, сканирование директорий и файлов..", Color.Blue);
                 folders = new Queue<FolderInfo>();
                 TreeNode tree = new TreeNode(rec.name, 0, 0);
+                TreeNode treeNF = new TreeNode("Не найдены на FTP", 2, 2);
+                treeNF.Expand();
                 folders.Enqueue(new FolderInfo("", tree, null));
                 await Task.Run(() =>
                 {
@@ -117,11 +119,12 @@ namespace FtpBackupProject
                 mf.SetStatus("Сканирование сервера завершено, синхронизация..", Color.Blue);
                 await Task.Run(() =>
                 {
-                    AddExistingFilesAndDirs(rec, tree);
+                    AddExistingFilesAndDirs(rec, tree, treeNF);
                 });
                 mf.SetStatus("Ожидание нового списка директорий и файлов..", Color.Blue);
-                EditDirs ed = new EditDirs(tree, mf);
+                EditDirs ed = new EditDirs(tree, mf, treeNF, rec);
                 ed.ShowDialog();
+                mf.UpdatePathUIList(rec);
             }
             else
             {
@@ -129,7 +132,7 @@ namespace FtpBackupProject
             }
         }
 
-        public static void AddExistingFilesAndDirs(Record rec, TreeNode tree)
+        public static void AddExistingFilesAndDirs(Record rec, TreeNode tree, TreeNode treeNF)
         {
             string tempPath;
             TreeNode tempNode;
@@ -137,19 +140,41 @@ namespace FtpBackupProject
             {
                 tempPath = "/";
                 tempNode = tree;
-                foreach(string sPath in f.pathParts)
+                bool isExist = true;
+                foreach(string tpath in f.pathParts)
                 {
-                    tempPath += sPath;
-                    if (f.isFolder)
+                    tempPath += tpath + "/";
+                    try
                     {
-                        rec.ftpClient.DirectoryExists()
+                        tempNode = getChildNodeForText(tempNode, tpath);
+                        if (tempNode == null) throw new Exception();
                     }
-                    else
+                    catch
                     {
-
+                        isExist = false;
+                        break;
                     }
                 }
+                if (isExist)
+                {
+                    tempNode.Checked = true;
+                }
+                else
+                {
+                    TreeNode temp = new TreeNode(f.pathUI, 2, 2);
+                    temp.Checked = true;
+                    treeNF.Nodes.Add(temp);
+                }
             }
+        }
+
+        private static TreeNode getChildNodeForText(TreeNode tree, string text)
+        {
+            foreach(TreeNode tn in tree.Nodes)
+            {
+                if (tn.Text.Equals(text)) return tn;
+            }
+            return null;
         }
 
         public static void DownloadLocal(Record rec)

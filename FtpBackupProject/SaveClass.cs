@@ -29,5 +29,27 @@ namespace FtpBackupProject
                 GlobalVars.records = new List<Record>();
             }
         }
+
+        public static void SaveTempRec(Record rec)
+        {
+            StreamWriter sw = new StreamWriter("TempRecord_"+rec.name+".json");
+            sw.Write(JsonConvert.SerializeObject(rec, Formatting.Indented));
+            sw.Close();
+        }
+
+        public static Record LoadTempRec(string name)
+        {
+            try
+            {
+                StreamReader sr = new StreamReader("TempRecord_" + name + ".json");
+                Record record = JsonConvert.DeserializeObject<Record>(sr.ReadToEnd());
+                sr.Close();
+                return record;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

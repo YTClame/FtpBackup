@@ -42,18 +42,17 @@ namespace FtpBackupProject
             SaveClass.SaveAll();
         }
 
+        private int oldChoice = -2;
+
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(listBox1.SelectedItem != null)
+            if(listBox1.SelectedItem != null && oldChoice != listBox1.SelectedIndex)
             {
+                oldChoice = listBox1.SelectedIndex;
                 panel1.Visible = true;
                 button2.Enabled = true;
                 rec = Record.findRecordForName(listBox1.SelectedItem.ToString());
-                listBox2.Items.Clear();
-                foreach (FileAndDirInfo f in rec.filesAndDirs)
-                {
-                    listBox2.Items.Add(f.pathUI);
-                }
+                UpdatePathUIList(rec);
                 textBoxHours.Text = rec.periodH.ToString();
                 textBoxMinuts.Text = rec.periodM.ToString();
                 textBoxSeconds.Text = rec.periodS.ToString();
@@ -61,6 +60,15 @@ namespace FtpBackupProject
                 labelStatus.Text = "";
                 label4.Text = "Следующее сохранение в " + rec.nextSaveDateTime.ToString();
                 label5.Text = rec.login + "@" + rec.IP + ":" + rec.port.ToString();
+            }
+        }
+
+        public void UpdatePathUIList(Record rec)
+        {
+            listBox2.Items.Clear();
+            foreach (FileAndDirInfo f in rec.filesAndDirs)
+            {
+                listBox2.Items.Add(f.pathUI);
             }
         }
 
@@ -175,6 +183,7 @@ namespace FtpBackupProject
 
         private void button6_Click(object sender, EventArgs e)
         {
+            BlockButtons(true);
             SetStatus("Подключение..", Color.Blue);
             WorkWithFTP.ConnectToFtpAsync(rec, this);
         }

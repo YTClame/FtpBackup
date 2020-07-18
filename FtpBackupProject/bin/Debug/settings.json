@@ -4,25 +4,6 @@
     "port": 21,
     "login": "plclogs",
     "password": "service",
-    "name": "Мой контроллер",
-    "filesAndDirs": [
-      {
-        "pathParts": [],
-        "isFolder": true,
-        "pathUI": "./*"
-      }
-    ],
-    "nextSaveDateTime": "2020-07-18T06:29:15.296824+03:00",
-    "folderPath": "E:\\",
-    "periodH": 11,
-    "periodM": 11,
-    "periodS": 11
-  },
-  {
-    "IP": "62.213.11.155",
-    "port": 21,
-    "login": "plclogs",
-    "password": "service",
     "name": "Мой контроллер3",
     "filesAndDirs": [
       {
@@ -52,5 +33,24 @@
     "periodH": 0,
     "periodM": 10,
     "periodS": 0
+  },
+  {
+    "IP": "62.213.11.155",
+    "port": 21,
+    "login": "plclogs",
+    "password": "service",
+    "name": "Мой контроллер",
+    "filesAndDirs": [
+      {
+        "pathParts": [],
+        "isFolder": true,
+        "pathUI": "./*"
+      }
+    ],
+    "nextSaveDateTime": "2020-07-18T06:29:15.296824+03:00",
+    "folderPath": "E:\\",
+    "periodH": 11,
+    "periodM": 11,
+    "periodS": 11
   }
 ]

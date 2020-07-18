@@ -15,11 +15,14 @@ namespace FtpBackupProject
         public List<string> pathParts;
         public bool isFolder;
         public string pathUI;
+        [JsonIgnore]
+        public bool isRemoving;
         public FileAndDirInfo(List<string> pathParts, bool isFolder, string pathUI)
         {
             this.pathParts = pathParts;
             this.isFolder = isFolder;
             this.pathUI = pathUI;
+            this.isRemoving = false;
         }
     }
     public class Record
@@ -70,6 +73,14 @@ namespace FtpBackupProject
             foreach(Record rec in GlobalVars.records)
             {
                 if (rec.name.Equals(name)) return rec;
+            }
+            return null;
+        }
+        public static FileAndDirInfo findFileAndDirInfoForPathUI(Record rec, string path)
+        {
+            foreach (FileAndDirInfo f in rec.filesAndDirs)
+            {
+                if (f.pathUI.Equals(path)) return f;
             }
             return null;
         }

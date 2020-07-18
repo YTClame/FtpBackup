@@ -55,6 +55,7 @@
             this.button1.TabIndex = 2;
             this.button1.Text = "Сохранить изменения";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // imageList1
             // 
@@ -75,6 +76,7 @@
             this.customTreeView1.SelectedImageIndex = 0;
             this.customTreeView1.Size = new System.Drawing.Size(379, 344);
             this.customTreeView1.TabIndex = 0;
+            this.customTreeView1.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.customTreeView1_AfterCheck);
             // 
             // EditDirs
             // 
@@ -90,6 +92,7 @@
             this.MinimumSize = new System.Drawing.Size(1034, 400);
             this.Name = "EditDirs";
             this.Text = "Редактировать список файлов и директорий для копирования";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EditDirs_FormClosed);
             this.ResumeLayout(false);
 
         }

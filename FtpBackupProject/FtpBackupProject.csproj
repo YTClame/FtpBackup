@@ -62,6 +62,12 @@
     <Compile Include="CustomTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="EditDirs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditDirs.Designer.cs">
+      <DependentUpon>EditDirs.cs</DependentUpon>
+    </Compile>
     <Compile Include="GlobalVars.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -76,6 +82,9 @@
     <Compile Include="WorkWithFTP.cs" />
     <EmbeddedResource Include="AddControllerForm.resx">
       <DependentUpon>AddControllerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditDirs.resx">
+      <DependentUpon>EditDirs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace FtpBackupProject
 {
@@ -156,6 +157,26 @@ namespace FtpBackupProject
             button3.Enabled = !isBlocked;
             button4.Enabled = !isBlocked;
             button5.Enabled = !isBlocked;
+            button6.Enabled = !isBlocked;
+            button7.Enabled = !isBlocked;
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Process.Start(rec.folderPath + rec.name);
+            }
+            catch
+            {
+                MessageBox.Show("Папка с копиями ещё не создана т.к. вы ещё не делали копирование в эту директорию.", "Ошибка!");
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            SetStatus("Подключение..", Color.Blue);
+            WorkWithFTP.ConnectToFtpAsync(rec, this);
         }
     }
 }

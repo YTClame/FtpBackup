@@ -84,6 +84,74 @@ namespace FtpBackupProject
             rec.ftpClient.Connect();
         }
 
+        public static async void ConnectToFtpAsync(Record rec, MainForm mf)
+        {
+            rec.isOnline = false;
+            rec.ftpClient = new FtpClient(rec.IP, rec.port, new System.Net.NetworkCredential(rec.login, rec.password));
+            await Task.Run(() =>
+            {
+                try
+                {
+                    rec.ftpClient.Connect();
+                    rec.isOnline = true;
+                }
+                catch
+                {
+                    rec.isOnline = false;
+                }
+            });
+            if (rec.isOnline)
+            {
+                mf.SetStatus("Подключено, сканирование директорий и файлов..", Color.Blue);
+                folders = new Queue<FolderInfo>();
+                TreeNode tree = new TreeNode(rec.name, 0, 0);
+                folders.Enqueue(new FolderInfo("", tree, null));
+                await Task.Run(() =>
+                {
+                    while (folders.Count > 0)
+                    {
+                        FolderInfo fi = folders.Dequeue();
+                        CheckDirectory(rec, fi.fullDir, fi.node);
+                    }
+                });
+                mf.SetStatus("Сканирование сервера завершено, синхронизация..", Color.Blue);
+                await Task.Run(() =>
+                {
+                    AddExistingFilesAndDirs(rec, tree);
+                });
+                mf.SetStatus("Ожидание нового списка директорий и файлов..", Color.Blue);
+                EditDirs ed = new EditDirs(tree, mf);
+                ed.ShowDialog();
+            }
+            else
+            {
+                mf.SetStatus("Ошибка соединения", Color.Red);
+            }
+        }
+
+        public static void AddExistingFilesAndDirs(Record rec, TreeNode tree)
+        {
+            string tempPath;
+            TreeNode tempNode;
+            foreach(FileAndDirInfo f in rec.filesAndDirs)
+            {
+                tempPath = "/";
+                tempNode = tree;
+                foreach(string sPath in f.pathParts)
+                {
+                    tempPath += sPath;
+                    if (f.isFolder)
+                    {
+                        rec.ftpClient.DirectoryExists()
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
+        }
+
         public static void DownloadLocal(Record rec)
         {
             string dir = rec.folderPath + rec.name + "\\" + DateTime.Now.ToString().Replace(':', '.');

@@ -21,8 +21,13 @@ namespace FtpBackupProject
         public MainForm()
         {
             InitializeComponent();
+            SaveClass.OpenLogFile();
+            SaveClass.WriteToLogFile("Программа запущена.");
+            SaveClass.WriteToLogFile("Чтение settings.txt, восстановление данных.");
             SaveClass.LoadAll();
+            SaveClass.WriteToLogFile("Обновление списка контроллеров.");
             UpdateList();
+            SaveClass.WriteToLogFile("Запуск потока для автоматического создания бэкапов.");
             autoDownload = new Thread(WorkWithFTP.AutoDownload);
             autoDownload.Start();
         }
@@ -43,7 +48,9 @@ namespace FtpBackupProject
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
+            SaveClass.WriteToLogFile("Закрытие программы. Сохранение данных. Остановка второго потока.");
             SaveClass.SaveAll();
+            SaveClass.CloseLogFile();
             autoDownload.Abort();
         }
 
@@ -79,10 +86,13 @@ namespace FtpBackupProject
 
         private void button2_Click(object sender, EventArgs e)
         {
+            SaveClass.WriteToLogFile("Удаление контроллера " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
             GlobalVars.records.Remove(rec);
             panel1.Visible = false;
             button2.Enabled = false;
             UpdateList();
+            oldChoice = -2;
+            listBox1.ClearSelected();
             SaveClass.SaveAll();
         }
 
@@ -100,10 +110,12 @@ namespace FtpBackupProject
             labelPath.Text = folderBrowserDialog1.SelectedPath;
             if (folderpath.ToCharArray()[folderpath.Length - 1] == '\\')
             {
+                SaveClass.WriteToLogFile("Обновление места хранения копий. Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString() + "; Старая директория: " + rec.folderPath + "; Новая директория: " + folderpath);
                 rec.folderPath = folderpath;
             }
             else
             {
+                SaveClass.WriteToLogFile("Обновление места хранения копий. Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString() + "; Старая директория: " + rec.folderPath + "; Новая директория: " + folderpath + "\\");
                 rec.folderPath = folderpath + "\\";
             }
             SaveClass.SaveAll();
@@ -149,10 +161,13 @@ namespace FtpBackupProject
             dt = dt.AddHours(hours);
             dt = dt.AddMinutes(minuts);
             dt = dt.AddSeconds(seconds);
+            SaveClass.WriteToLogFile("Изменение периода сохранения. Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
+            SaveClass.WriteToLogFile("Старый период: " + rec.periodH.ToString() + "Ч; " + rec.periodM.ToString() + "М; " + rec.periodS.ToString() + "С;");
             rec.nextSaveDateTime = dt;
             rec.periodH = hours;
             rec.periodM = minuts;
             rec.periodS = seconds;
+            SaveClass.WriteToLogFile("Новый период: " + rec.periodH.ToString() + "Ч; " + rec.periodM.ToString() + "М; " + rec.periodS.ToString() + "С;");
             SetStatus("Период сохранения успешно изменён", Color.DarkGreen);
             SaveClass.SaveAll();
             label4.Text = "Следующее сохранение в " + rec.nextSaveDateTime.ToString();

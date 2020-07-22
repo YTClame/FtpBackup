@@ -17,6 +17,7 @@ namespace FtpBackupProject
         public AddControllerForm(MainForm mf)
         {
             InitializeComponent();
+            SaveClass.WriteToLogFile("Открыто окно добавления контроллера.");
             SetStatus("Ожидание попытки подключения");
             mainform = mf;
         }
@@ -190,6 +191,13 @@ namespace FtpBackupProject
             rec.periodM = minuts;
             rec.periodS = seconds;
             GlobalVars.records.Add(rec);
+            SaveClass.WriteToLogFile("Добавлен новый контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
+            SaveClass.WriteToLogFile("Директории:");
+            foreach(FileAndDirInfo fff in rec.filesAndDirs)
+            {
+                SaveClass.WriteToLogFile(fff.pathUI);
+            }
+            SaveClass.WriteToLogFile("Период: " + rec.periodH.ToString() + "Ч; " + rec.periodM.ToString() + "М; " + rec.periodS.ToString() + "С;");
             mainform.UpdateList();
             if (checkBox1.Checked)
             {

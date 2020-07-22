@@ -48,7 +48,7 @@ namespace FtpBackupProject
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            SaveClass.WriteToLogFile("Закрытие программы. Сохранение данных. Остановка второго потока.");
+            SaveClass.WriteToLogFile("Закрытие программы. Сохранение данных. Остановка второго потока.\r\n");
             SaveClass.SaveAll();
             SaveClass.CloseLogFile();
             autoDownload.Abort();
@@ -211,6 +211,28 @@ namespace FtpBackupProject
         private void timer1_Tick(object sender, EventArgs e)
         {
             if(rec != null) label4.Text = "Следующее сохранение в " + rec.nextSaveDateTime.ToString();
+        }
+
+        private void notifyIcon1_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Normal;
+        }
+
+        private void MainForm_Deactivate(object sender, EventArgs e)
+        {
+            if (this.WindowState == System.Windows.Forms.FormWindowState.Minimized)
+            {
+                this.ShowInTaskbar = false;
+                notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
+                notifyIcon1.BalloonTipText = "Нажмите сюда, чтобы отобразить окно FTP Backup";
+                notifyIcon1.BalloonTipTitle = "Подсказка";
+                notifyIcon1.ShowBalloonTip(12000);
+            }
+        }
+
+        private void MainForm_Activated(object sender, EventArgs e)
+        {
+            this.ShowInTaskbar = true;
         }
     }
 }

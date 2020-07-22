@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Management;
 using System.Windows.Forms;
 
 namespace FtpBackupProject
@@ -27,6 +28,7 @@ namespace FtpBackupProject
             {
                 acf.ConnectionResult(false);
             }
+            SaveClass.WriteToLogFile("ConnectToFTP(...): " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString() + ": [" + rec.ftpClient.IsConnected.ToString() + "]");
         }
 
         public static void AutoDownload()
@@ -34,11 +36,16 @@ namespace FtpBackupProject
             while (true)
             {
                 Thread.Sleep(700);
+                if (GlobalVars.records == null)
+                {
+                    continue;
+                }
                 foreach (Record rec in GlobalVars.records)
                 {
-                    if (rec.nextSaveDateTime < DateTime.Now)
+                    if (rec != null && rec.nextSaveDateTime < DateTime.Now && rec.filesAndDirs.Count > 0)
                     {
                         DateTime dt = DateTime.Now;
+                        SaveClass.WriteToLogFile("АВТОМАТИЧЕСКАЯ КОПИЯ! Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
                         dt = dt.AddHours(rec.periodH);
                         dt = dt.AddMinutes(rec.periodM);
                         dt = dt.AddSeconds(rec.periodS);
@@ -52,40 +59,74 @@ namespace FtpBackupProject
         public static async void DownloadWithMainForm(Record rec, MainForm mf, bool isBackgroundDownload)
         {
             bool isConnected = true;
+            string exc = "Ошибка";
             await Task.Run(() =>
             {
                 try
                 {
                     ConnectToFTP(rec);
                 }
+                catch(System.Net.Sockets.SocketException)
+                {
+                    isConnected = false;
+                    exc = "FTP сервер не отвечает";
+                    SaveClass.WriteToLogFile("DownloadWithMainForm(...) System.Net.Sockets.SocketException ; Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
+                }
+                catch (FluentFTP.FtpAuthenticationException)
+                {
+                    isConnected = false;
+                    exc = "Ошибка авторизации";
+                    SaveClass.WriteToLogFile("DownloadWithMainForm(...) FluentFTP.FtpAuthenticationException ; Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
+                }
                 catch
                 {
                     isConnected = false;
+                    exc = "Неожиданная ошибка";
+                    SaveClass.WriteToLogFile("DownloadWithMainForm(...) Неизвестная ошибка подключения к серверу ; Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
                 }
             });
             if (isConnected)
             {
+                SaveClass.WriteToLogFile("Соединение установлено успешно, скачивание начинается. Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
                 if (!isBackgroundDownload)
                 {
                     mf.SetStatus("Соединение установлено, скачивание..", Color.DarkGreen);
                 }
+                bool isGood = true;
                 await Task.Run(() =>
                 {
-                    DownloadLocal(rec);
+                    if (!DownloadLocal(rec)) isGood = false; ;
                 });
-                if (!isBackgroundDownload)
+                rec.ftpClient.Disconnect();
+                if (!isGood && !isBackgroundDownload)
                 {
+                    SaveClass.WriteToLogFile("Загрузка завершена, но не все файлы были найдены на сервере.");
+                    mf.SetStatus("Загрузка завершена, но не все файлы были найдены на сервере", Color.Red);
+                    mf.BlockButtons(false);
+                }
+                if (!isBackgroundDownload && isGood)
+                {
+                    SaveClass.WriteToLogFile("Загрузка завершена без проблем. Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
                     mf.SetStatus("Загрузка завершена", Color.DarkGreen);
                     mf.BlockButtons(false);
+                }
+                if(isBackgroundDownload && isGood)
+                {
+                    SaveClass.WriteToLogFile("Загрузка завершена без проблем. Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
+                }
+                if(isBackgroundDownload && !isGood)
+                {
+                    SaveClass.WriteToLogFile("Загрузка завершена, но не все файлы были найдены на сервере.");
                 }
             }
             else
             {
                 if (!isBackgroundDownload)
                 {
-                    mf.SetStatus("Ошибка соединения", Color.Red);
+                    mf.SetStatus(exc, Color.Red);
                     mf.BlockButtons(false);
                 }
+                rec.ftpClient.Disconnect();
             }
         }
 
@@ -98,18 +139,35 @@ namespace FtpBackupProject
         public static async void ConnectToFtpAsync(Record rec, MainForm mf)
         {
             rec.ftpClient = new FtpClient(rec.IP, rec.port, new System.Net.NetworkCredential(rec.login, rec.password));
+            string exc = "Ошибка при подключении";
+            bool isAllGood = true;
             await Task.Run(() =>
             {
                 try
                 {
                     rec.ftpClient.Connect();
+                    SaveClass.WriteToLogFile("Попытка подключения. Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
+                }
+                catch(System.Net.Sockets.SocketException)
+                {
+                    exc = "FTP сервер не отвечает";
+                    isAllGood = false;
+                    SaveClass.WriteToLogFile("ConnectToFtpAsync(...): System.Net.Sockets.SocketException. ; Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
+                }
+                catch(FluentFTP.FtpAuthenticationException)
+                {
+                    exc = "Ошибка авторизации";
+                    isAllGood = false;
+                    SaveClass.WriteToLogFile("ConnectToFtpAsync(...): FluentFTP.FtpAuthenticationException. ; Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
                 }
                 catch
                 {
-
+                    exc = "Неожиданная ошибка";
+                    isAllGood = false;
+                    SaveClass.WriteToLogFile("ConnectToFtpAsync(...): Неизвестная ошибка. ; Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
                 }
             });
-            if (rec.ftpClient.IsConnected)
+            if (rec.ftpClient.IsConnected && isAllGood)
             {
                 mf.SetStatus("Подключено, сканирование директорий и файлов..", Color.Blue);
                 folders = new Queue<FolderInfo>();
@@ -117,27 +175,42 @@ namespace FtpBackupProject
                 TreeNode treeNF = new TreeNode("Не найдены на FTP", 2, 2);
                 treeNF.Expand();
                 folders.Enqueue(new FolderInfo("", tree, null));
+                bool isGoodChecking = true;
+                SaveClass.WriteToLogFile("Сканирование директорий и файлов. Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
                 await Task.Run(() =>
                 {
                     while (folders.Count > 0)
                     {
                         FolderInfo fi = folders.Dequeue();
-                        CheckDirectory(rec, fi.fullDir, fi.node);
+                        if(!CheckDirectory(rec, fi.fullDir, fi.node)) isGoodChecking = false;
                     }
                 });
+                if (!isGoodChecking)
+                {
+                    rec.ftpClient.Disconnect();
+                    mf.SetStatus("Ошибка при сканировании файлов", Color.Red);
+                    SaveClass.WriteToLogFile("Ошибка при сканировании файлов.");
+                    mf.BlockButtons(false);
+                    return;
+                }
+                SaveClass.WriteToLogFile("Сканирование завершено. Синхронизация...");
                 mf.SetStatus("Сканирование сервера завершено, синхронизация..", Color.Blue);
                 await Task.Run(() =>
                 {
                     AddExistingFilesAndDirs(rec, tree, treeNF);
                 });
+                SaveClass.WriteToLogFile("Синхронизация завершена.");
                 mf.SetStatus("Ожидание нового списка директорий и файлов..", Color.Blue);
+                rec.ftpClient.Disconnect();
                 EditDirs ed = new EditDirs(tree, mf, treeNF, rec);
                 ed.ShowDialog();
                 mf.UpdatePathUIList(rec);
             }
             else
             {
-                mf.SetStatus("Ошибка соединения", Color.Red);
+                rec.ftpClient.Disconnect();
+                mf.SetStatus(exc, Color.Red);
+                mf.BlockButtons(false);
             }
         }
 
@@ -186,46 +259,87 @@ namespace FtpBackupProject
             return null;
         }
 
-        public static void DownloadLocal(Record rec)
+        public static bool DownloadLocal(Record rec)
         {
-            string dir = rec.folderPath + rec.name + "\\" + DateTime.Now.ToString().Replace(':', '.');
-            Directory.CreateDirectory(dir);
-            foreach (FileAndDirInfo fi in rec.filesAndDirs)
+            string pathOnFtp = "";
+            try
             {
-                string pathOnFtp = "";
-                string dirTemp = dir;
-                foreach (string partPath in fi.pathParts)
+                string dir = rec.folderPath + rec.name + "\\" + DateTime.Now.ToString().Replace(':', '.');
+                Directory.CreateDirectory(dir);
+                foreach (FileAndDirInfo fi in rec.filesAndDirs)
                 {
-                    pathOnFtp += "/" + partPath;
-                    dirTemp += "\\" + partPath;
-                }
-                if (pathOnFtp.Equals("")) pathOnFtp = "/";
+                    pathOnFtp = "";
+                    string dirTemp = dir;
+                    foreach (string partPath in fi.pathParts)
+                    {
+                        pathOnFtp += "/" + partPath;
+                        dirTemp += "\\" + partPath;
+                    }
+                    if (pathOnFtp.Equals("")) pathOnFtp = "/";
 
-                if (fi.isFolder)
-                {
-                    if(rec.ftpClient.DirectoryExists(pathOnFtp))
-                        rec.ftpClient.DownloadDirectory(dirTemp, pathOnFtp, FtpFolderSyncMode.Update);
+                    if (fi.isFolder)
+                    {
+                        try
+                        {
+                            if (rec.ftpClient.DirectoryExists(pathOnFtp))
+                            {
+                                rec.ftpClient.DownloadDirectory(dirTemp, pathOnFtp, FtpFolderSyncMode.Update);
+                            }
+                            else
+                            {
+                                SaveClass.WriteToLogFile("Директория не найдена: " + pathOnFtp + " Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
+                            }
+                        }
+                        catch
+                        {
+                            SaveClass.WriteToLogFile("Ошибка скачивания из - за перебоя с интернет соединением. Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
+                        }
+                            
+                    }
+                    else
+                    {
+                        try
+                        {
+                            if (rec.ftpClient.FileExists(pathOnFtp))
+                            {
+                                rec.ftpClient.DownloadFile(dirTemp, pathOnFtp);
+                            }
+                            else
+                            {
+                                SaveClass.WriteToLogFile("Файл не найден: " + pathOnFtp + " Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
+                            }
+                        }
+                        catch
+                        {
+                            SaveClass.WriteToLogFile("Ошибка скачивания из - за перебоя с интернет соединением. Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
+                        }
+                    }
                 }
-                else
-                {
-                    if(rec.ftpClient.FileExists(pathOnFtp))
-                        rec.ftpClient.DownloadFile(dirTemp, pathOnFtp);
-                }
-
+                rec.ftpClient.Disconnect();
+                SaveClass.SaveAll();
+                return true;
             }
-            rec.ftpClient.Disconnect();
-            SaveClass.SaveAll();
+            catch
+            {
+                SaveClass.WriteToLogFile("Ошибка скачивания: " + pathOnFtp + " Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
+                rec.ftpClient.Disconnect();
+                SaveClass.SaveAll();
+                return false;
+            }
+            
+            
         }
 
         public static async void Download(Record rec, AddControllerForm acf)
         {
+            string pathOnFtp = "";
             string dir = rec.folderPath + rec.name + "\\" + DateTime.Now.ToString().Replace(':', '.');
             Directory.CreateDirectory(dir);
             await Task.Run(() =>
             {
                 foreach(FileAndDirInfo fi in rec.filesAndDirs)
                 {
-                    string pathOnFtp = "";
+                    pathOnFtp = "";
                     string dirTemp = dir;
                     foreach(string partPath in fi.pathParts)
                     {
@@ -235,11 +349,26 @@ namespace FtpBackupProject
                     if (pathOnFtp.Equals("")) pathOnFtp = "/";
                     if (fi.isFolder)
                     {
-                        rec.ftpClient.DownloadDirectory(dirTemp, pathOnFtp, FtpFolderSyncMode.Update);
+                        if (rec.ftpClient.DirectoryExists(pathOnFtp))
+                        {
+                            rec.ftpClient.DownloadDirectory(dirTemp, pathOnFtp, FtpFolderSyncMode.Update);
+                        }
+                        else
+                        {
+                            SaveClass.WriteToLogFile("Директория не найдена: " + pathOnFtp + " Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
+                        }
+
                     }
                     else
                     {
-                        rec.ftpClient.DownloadFile(dirTemp, pathOnFtp);
+                        if (rec.ftpClient.FileExists(pathOnFtp))
+                        {
+                            rec.ftpClient.DownloadFile(dirTemp, pathOnFtp);
+                        }
+                        else
+                        {
+                            SaveClass.WriteToLogFile("Файл не найден: " + pathOnFtp + " Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
+                        }
                     }
                 }
             });
@@ -266,22 +395,30 @@ namespace FtpBackupProject
 
         private static Queue<FolderInfo> folders;
 
-        private static void CheckDirectory(Record rec, string path, TreeNode parent)
+        private static bool CheckDirectory(Record rec, string path, TreeNode parent)
         {
-            foreach (FtpListItem item in rec.ftpClient.GetListing(path))
+            try
             {
-                if (item.Type == FtpFileSystemObjectType.File)
+                foreach (FtpListItem item in rec.ftpClient.GetListing(path))
                 {
-                    TreeNode tempFileNode = new TreeNode(item.Name, 1, 1);
-                    if (parent != null) parent.Nodes.Add(tempFileNode);
-                }
-                if (item.Type == FtpFileSystemObjectType.Directory)
-                {
-                    TreeNode tempFolderNode = new TreeNode(item.Name, 0, 0);
-                    if (parent != null) parent.Nodes.Add(tempFolderNode);
-                    folders.Enqueue(new FolderInfo(item.FullName, tempFolderNode, parent));
+                    if (item.Type == FtpFileSystemObjectType.File)
+                    {
+                        TreeNode tempFileNode = new TreeNode(item.Name, 1, 1);
+                        if (parent != null) parent.Nodes.Add(tempFileNode);
+                    }
+                    if (item.Type == FtpFileSystemObjectType.Directory)
+                    {
+                        TreeNode tempFolderNode = new TreeNode(item.Name, 0, 0);
+                        if (parent != null) parent.Nodes.Add(tempFolderNode);
+                        folders.Enqueue(new FolderInfo(item.FullName, tempFolderNode, parent));
+                    }
                 }
             }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
 
         private class FolderInfo

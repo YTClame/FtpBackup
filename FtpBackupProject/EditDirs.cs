@@ -19,6 +19,8 @@ namespace FtpBackupProject
         public EditDirs(TreeNode tree, MainForm mf, TreeNode treeNF, Record rec)
         {
             InitializeComponent();
+            SaveClass.WriteToLogFile("Открыто окно редактирования директорий контроллера [EditDirs]");
+            SaveClass.WriteToLogFile("Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
             this.mf = mf;
             this.rec = rec;
             customTreeView1.Nodes.Add(tree);
@@ -26,7 +28,12 @@ namespace FtpBackupProject
             name = rec.name;
             SaveClass.SaveTempRec(rec);
             isButtonClose = false;
-            foreach(FileAndDirInfo f in rec.filesAndDirs) listBox1.Items.Add(f.pathUI);
+            SaveClass.WriteToLogFile("Текущие директории:");
+            foreach (FileAndDirInfo f in rec.filesAndDirs)
+            {
+                listBox1.Items.Add(f.pathUI);
+                SaveClass.WriteToLogFile(f.pathUI);
+            }
         }
 
         private void customTreeView1_AfterCheck(object sender, TreeViewEventArgs e)
@@ -114,17 +121,24 @@ namespace FtpBackupProject
         private void EditDirs_FormClosed(object sender, FormClosedEventArgs e)
         {
             mf.BlockButtons(false);
-            File.Delete("TempRecord_" + name + ".json");
             if (isButtonClose)
             {
                 mf.SetStatus("Изменения директорий и файлов сохранены", Color.DarkGreen);
+                SaveClass.WriteToLogFile("Новый список директорий и файлов:");
+                foreach(FileAndDirInfo fff in rec.filesAndDirs)
+                {
+                    SaveClass.WriteToLogFile(fff.pathUI);
+                }
             }
             else
             {
                 GlobalVars.records.Remove(rec);
                 GlobalVars.records.Add(SaveClass.LoadTempRec(name));
                 mf.SetStatus("Изменения не были сохранены", Color.Red);
+                SaveClass.WriteToLogFile("Нажатие на крестик - закрытие окна без сохранения.");
             }
+            File.Delete("TempRecord_" + name + ".json");
+            SaveClass.SaveAll();
         }
     }
 }

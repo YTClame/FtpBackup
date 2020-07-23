@@ -38,6 +38,7 @@ namespace FtpBackupProject
         public int periodH;
         public int periodM;
         public int periodS;
+        public long maxFilesSize;
         
         [JsonIgnore]
         public FtpClient ftpClient;
@@ -50,6 +51,7 @@ namespace FtpBackupProject
             this.password = password;
             this.name = name;
             this.filesAndDirs = new List<FileAndDirInfo>();
+            this.maxFilesSize = 100 * 1024 * 1024;
         }
 
         public void RemoveFileOrDir(string path)

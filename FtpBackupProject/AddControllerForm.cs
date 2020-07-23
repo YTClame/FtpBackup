@@ -177,7 +177,7 @@ namespace FtpBackupProject
             dt = dt.AddHours(hours);
             dt = dt.AddMinutes(minuts);
             dt = dt.AddSeconds(seconds);
-            rec.nextSaveDateTime = dt;
+            
             string folderpath = folderBrowserDialog1.SelectedPath;
             if (folderpath.ToCharArray()[folderpath.Length-1] == '\\')
             {
@@ -198,18 +198,22 @@ namespace FtpBackupProject
                 SaveClass.WriteToLogFile(fff.pathUI);
             }
             SaveClass.WriteToLogFile("Период: " + rec.periodH.ToString() + "Ч; " + rec.periodM.ToString() + "М; " + rec.periodS.ToString() + "С;");
+            SaveClass.WriteToLogFile("Директория сохранения: " + rec.folderPath);
             mainform.UpdateList();
             if (checkBox1.Checked)
             {
-                WorkWithFTP.Download(rec, this);
+                rec.nextSaveDateTime = DateTime.Now;
+                SaveClass.WriteToLogFile("Создание первой копии прямо сейчас (т.к. был установлен чекбокс):");
                 SetStatus("Создание копии..");
             }
             else
             {
-                rec.ftpClient.Disconnect();
-                SaveClass.SaveAll();
-                Close();
+                rec.nextSaveDateTime = dt;
+                SaveClass.WriteToLogFile("Первое копирование произойдёт после введённого периода (т.к. не был установлен чекбокс).");
             }
+            rec.ftpClient.Disconnect();
+            SaveClass.SaveAll();
+            Close();
         }
     }
 }

@@ -15,3 +15,4 @@ C:\Users\Clame\Desktop\FtpBackup\FtpBackupProject\bin\Debug\FluentFTP.xml
 C:\Users\Clame\Desktop\FtpBackup\FtpBackupProject\obj\Debug\FtpBackupProject.MainForm.resources
 C:\Users\Clame\Desktop\FtpBackup\FtpBackupProject\obj\Debug\FtpBackupProject.AddControllerForm.resources
 C:\Users\Clame\Desktop\FtpBackup\FtpBackupProject\obj\Debug\FtpBackupProject.EditDirs.resources
+C:\Users\Clame\Desktop\FtpBackup\FtpBackupProject\obj\Debug\FtpBackupProject.LogSettings.resources

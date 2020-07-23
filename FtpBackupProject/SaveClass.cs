@@ -13,47 +13,63 @@ namespace FtpBackupProject
 {
     public class SaveClass
     {
-        private static StreamWriter swLOG;
         private static StreamWriter sw;
-        private static int counter = 0;
-        public static void OpenLogFile()
-        {
-            try
-            {
-                swLOG = new StreamWriter("Log.txt", true);
-            }
-            catch
-            {
-                swLOG = null;
-            }
-        }
+        private static Queue<LogInfo> messages;
         public static void WriteToLogFile(string message)
         {
-            counter++;
-            try
+            if(GlobalVars.savingMode != -1)
             {
-                swLOG.Write("[" + DateTime.Now.ToString() + "]: " + message + "\r\n");
-                if(counter >= 10)
+                try
                 {
-                    counter = 0;
-                    CloseLogFile();
-                    OpenLogFile();
+                    if(GlobalVars.savingMode == 1)
+                    {
+                        FileInfo file = new System.IO.FileInfo("Log.txt");
+                        long size = file.Length;
+                        if (size > Convert.ToInt64(GlobalVars.maxLogSize * 1024 * 1024)) File.Delete("Log.txt");
+                    }
+                }
+                catch { }
+                if (messages == null) messages = new Queue<LogInfo>();
+                try
+                {
+                    bool isExist = File.Exists("Log.txt");
+                    StreamWriter swLOG = new StreamWriter("Log.txt", true);
+                    while (messages.Count > 0)
+                    {
+                        LogInfo li = messages.Dequeue();
+                        if(li.mes.Equals("Программа запущена.") && isExist)
+                        {
+                            swLOG.Write("\r\n[" + li.date.ToString() + "]: " + li.mes + "\r\n");
+                        }
+                        else
+                        {
+                            swLOG.Write("[" + li.date.ToString() + "]: " + li.mes + "\r\n");
+                        }
+                    }
+                    if(message.Equals("Программа запущена.") && isExist)
+                    {
+                        swLOG.Write("\r\n[" + DateTime.Now.ToString() + "]: " + message + "\r\n");
+                    }
+                    else
+                    {
+                        swLOG.Write("[" + DateTime.Now.ToString() + "]: " + message + "\r\n");
+                    }
+                    swLOG.Close();
+                }
+                catch
+                {
+                    messages.Enqueue(new LogInfo(message));
                 }
             }
-            catch
-            {
-
-            }
         }
-        public static void CloseLogFile()
+        private class LogInfo
         {
-            try
+            public string mes;
+            public DateTime date;
+            public LogInfo(string mes)
             {
-                swLOG.Close();
-            }
-            catch
-            {
-
+                this.mes = mes;
+                date = DateTime.Now;
             }
         }
         public static void SaveAll()
@@ -61,17 +77,12 @@ namespace FtpBackupProject
             try
             {
                 sw = new StreamWriter("settings.json");
-                sw.Write(JsonConvert.SerializeObject(GlobalVars.records, Formatting.Indented));
+                sw.Write(JsonConvert.SerializeObject(new Saving(GlobalVars.records, GlobalVars.maxLogSize, GlobalVars.savingMode), Formatting.Indented));
                 sw.Close();
             }
-            catch
+            catch(Exception e)
             {
-                try
-                {
-                    sw.Write(JsonConvert.SerializeObject(GlobalVars.records, Formatting.Indented));
-                    sw.Close();
-                }
-                catch { }
+                WriteToLogFile("Ошибка сохранения settings.json: " + e.Message);
             }
         }
         public static void LoadAll()
@@ -79,8 +90,11 @@ namespace FtpBackupProject
             try
             {
                 StreamReader sr = new StreamReader("settings.json");
-                GlobalVars.records = JsonConvert.DeserializeObject<List<Record>>(sr.ReadToEnd());
+                Saving save = JsonConvert.DeserializeObject<Saving>(sr.ReadToEnd());
                 sr.Close();
+                GlobalVars.records = save.records;
+                GlobalVars.maxLogSize = save.maxLogSize;
+                GlobalVars.savingMode = save.savingMode;
                 if (GlobalVars.records == null) throw new Exception();
             }
             catch

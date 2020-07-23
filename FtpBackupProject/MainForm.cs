@@ -21,9 +21,8 @@ namespace FtpBackupProject
         public MainForm()
         {
             InitializeComponent();
-            SaveClass.OpenLogFile();
             SaveClass.WriteToLogFile("Программа запущена.");
-            SaveClass.WriteToLogFile("Чтение settings.txt, восстановление данных.");
+            SaveClass.WriteToLogFile("Чтение settings.json, восстановление данных.");
             SaveClass.LoadAll();
             SaveClass.WriteToLogFile("Обновление списка контроллеров.");
             UpdateList();
@@ -48,9 +47,8 @@ namespace FtpBackupProject
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            SaveClass.WriteToLogFile("Закрытие программы. Сохранение данных. Остановка второго потока.\r\n");
+            SaveClass.WriteToLogFile("Остановка второго потока. Сохранение данных. Закрытие программы.\r\n");
             SaveClass.SaveAll();
-            SaveClass.CloseLogFile();
             autoDownload.Abort();
         }
 
@@ -233,6 +231,11 @@ namespace FtpBackupProject
         private void MainForm_Activated(object sender, EventArgs e)
         {
             this.ShowInTaskbar = true;
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            new LogSettings().Show();
         }
     }
 }

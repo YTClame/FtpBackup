@@ -69,6 +69,12 @@
       <DependentUpon>EditDirs.cs</DependentUpon>
     </Compile>
     <Compile Include="GlobalVars.cs" />
+    <Compile Include="LogSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LogSettings.Designer.cs">
+      <DependentUpon>LogSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -85,6 +91,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EditDirs.resx">
       <DependentUpon>EditDirs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogSettings.resx">
+      <DependentUpon>LogSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

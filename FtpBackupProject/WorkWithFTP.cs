@@ -316,14 +316,12 @@ namespace FtpBackupProject
                     }
                 }
                 rec.ftpClient.Disconnect();
-                SaveClass.SaveAll();
                 return true;
             }
             catch
             {
                 SaveClass.WriteToLogFile("Ошибка скачивания: " + pathOnFtp + " Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
                 rec.ftpClient.Disconnect();
-                SaveClass.SaveAll();
                 return false;
             }
             
@@ -373,7 +371,6 @@ namespace FtpBackupProject
                 }
             });
             rec.ftpClient.Disconnect();
-            SaveClass.SaveAll();
             acf.Close();
         }
 

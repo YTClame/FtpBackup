@@ -1,0 +1,73 @@
+{
+  "records": [
+    {
+      "IP": "62.213.11.155",
+      "port": 21,
+      "login": "plclogs",
+      "password": "service",
+      "name": "КОНТРОЛЛЕР_1",
+      "filesAndDirs": [
+        {
+          "pathParts": [
+            "logger",
+            "user",
+            "sloginfo.log"
+          ],
+          "isFolder": false,
+          "pathUI": "./logger/user/sloginfo.log"
+        }
+      ],
+      "nextSaveDateTime": "2020-07-23T15:39:20.485142+03:00",
+      "folderPath": "E:\\",
+      "periodH": 0,
+      "periodM": 0,
+      "periodS": 5
+    },
+    {
+      "IP": "62.213.11.155",
+      "port": 21,
+      "login": "plclogs",
+      "password": "service",
+      "name": "КОНТРОЛЛЕР_2",
+      "filesAndDirs": [
+        {
+          "pathParts": [
+            "logger",
+            "system.log"
+          ],
+          "isFolder": false,
+          "pathUI": "./logger/system.log"
+        }
+      ],
+      "nextSaveDateTime": "2020-07-23T15:39:20.496377+03:00",
+      "folderPath": "E:\\",
+      "periodH": 0,
+      "periodM": 0,
+      "periodS": 5
+    },
+    {
+      "IP": "62.213.11.155",
+      "port": 21,
+      "login": "plclogs",
+      "password": "service",
+      "name": "Мой контроллер",
+      "filesAndDirs": [
+        {
+          "pathParts": [
+            "logger",
+            "system.log"
+          ],
+          "isFolder": false,
+          "pathUI": "./logger/system.log"
+        }
+      ],
+      "nextSaveDateTime": "2020-07-23T15:39:22.5023323+03:00",
+      "folderPath": "E:\\",
+      "periodH": 0,
+      "periodM": 0,
+      "periodS": 7
+    }
+  ],
+  "maxLogSize": 1,
+  "savingMode": 1
+}

@@ -454,7 +454,7 @@
             this.MaximumSize = new System.Drawing.Size(960, 480);
             this.MinimumSize = new System.Drawing.Size(960, 480);
             this.Name = "MainForm";
-            this.Text = "Controllers ftp backup\'er";
+            this.Text = "FTP Backup Release v1.2";
             this.Activated += new System.EventHandler(this.MainForm_Activated);
             this.Deactivate += new System.EventHandler(this.MainForm_Deactivate);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);

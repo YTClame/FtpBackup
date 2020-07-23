@@ -284,7 +284,11 @@ namespace FtpBackupProject
                         {
                             if (rec.ftpClient.DirectoryExists(pathOnFtp))
                             {
-                                rec.ftpClient.DownloadDirectory(dirTemp, pathOnFtp, FtpFolderSyncMode.Update);
+                                List<FtpResult> ftpResults = rec.ftpClient.DownloadDirectory(dirTemp, pathOnFtp, FtpFolderSyncMode.Update);
+                                foreach (FtpResult ftpRes in ftpResults)
+                                {
+                                    size += ftpRes.Size;
+                                }
                             }
                             else
                             {
@@ -315,47 +319,63 @@ namespace FtpBackupProject
                         {
                             SaveClass.WriteToLogFile("Ошибка скачивания из - за перебоя с интернет соединением. Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
                         }
-                        //Размеры и перезапись господи спаси:
-                        try
-                        {
-                            try
-                            {
-                                StreamWriter sw1 = new StreamWriter(dir + "\\size");
-                                sw1.WriteLine(size.ToString());
-                                sw1.Close();
-                            }
-                            catch
-                            {
-                                SaveClass.WriteToLogFile("Ошибка определения размера файлов бэкапа или же записи их в файл.");
-                            }
-                            StreamReader sr;
-                            try
-                            {
-                                sr = new StreamReader(rec.folderPath + rec.name + "\\size");
-                            }
-                            catch
-                            {
-                                StreamWriter sw2 = new StreamWriter(rec.folderPath + rec.name + "\\size");
-                                sw2.Write("0");
-                                sw2.Close();
-                                sr = new StreamReader(rec.folderPath + rec.name + "\\size");
-                            }
-                            long tempSize = Convert.ToInt64(sr.ReadToEnd());
-                            sr.Close();
-                            tempSize += size;
-                            StreamWriter sw3 = new StreamWriter(rec.folderPath + rec.name + "\\size");
-                            sw3.Write(tempSize.ToString());
-                            sw3.Close();
-                            //Проверка размерности и удаление папок:
-                            
-                        }
-                        catch
-                        {
-                            SaveClass.WriteToLogFile("Ошибка доступа к файлам size.");
-                        }
                     }
                 }
                 rec.ftpClient.Disconnect();
+                //Размеры и перезапись господи спаси:
+                try
+                {
+                    try
+                    {
+                        StreamWriter sw1 = new StreamWriter(dir + "\\size");
+                        sw1.WriteLine(size.ToString());
+                        sw1.Close();
+                    }
+                    catch
+                    {
+                        SaveClass.WriteToLogFile("Ошибка определения размера файлов бэкапа или же записи их в файл.");
+                    }
+                    StreamReader sr;
+                    try
+                    {
+                        sr = new StreamReader(rec.folderPath + rec.name + "\\size");
+                    }
+                    catch
+                    {
+                        StreamWriter sw2 = new StreamWriter(rec.folderPath + rec.name + "\\size");
+                        sw2.Write("0");
+                        sw2.Close();
+                        sr = new StreamReader(rec.folderPath + rec.name + "\\size");
+                    }
+                    long tempSize = Convert.ToInt64(sr.ReadToEnd());
+                    sr.Close();
+                    tempSize += size;
+                    StreamWriter sw3 = new StreamWriter(rec.folderPath + rec.name + "\\size");
+                    sw3.Write(tempSize.ToString());
+                    sw3.Close();
+                    //Проверка размерности и удаление папок:
+                    while (tempSize >= rec.maxFilesSize)
+                    {
+                        string[] allfolders = Directory.GetDirectories(rec.folderPath + rec.name + "\\");
+                        if (allfolders.Length > 0)
+                        {
+                            StreamReader sr2 = new StreamReader(allfolders[0] + "\\size");
+                            long tempS = Convert.ToInt64(sr2.ReadToEnd());
+                            sr2.Close();
+                            Directory.Delete(allfolders[0], true);
+                            SaveClass.WriteToLogFile("Удалена папка: " + allfolders[0] + " из-за превышения допустимого размера папки бэкапов контроллера. (" + ((tempSize/1024)/1024).ToString() + " -> " + (((tempSize - tempS) / 1024) / 1024).ToString() + ") / " + ((rec.maxFilesSize/1024)/1024).ToString() + " (МБ).");
+                            StreamWriter sw4 = new StreamWriter(rec.folderPath + rec.name + "\\size");
+                            tempSize -= tempS;
+                            sw4.Write(tempSize.ToString());
+                            sw4.Close();
+                            allfolders = Directory.GetDirectories(rec.folderPath + rec.name + "\\");
+                        }
+                    }
+                }
+                catch
+                {
+                    SaveClass.WriteToLogFile("Ошибка доступа к файлам size.");
+                }
                 return true;
             }
             catch

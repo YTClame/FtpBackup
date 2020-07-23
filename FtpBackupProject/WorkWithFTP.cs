@@ -264,6 +264,7 @@ namespace FtpBackupProject
             string pathOnFtp = "";
             try
             {
+                long size = 0;
                 string dir = rec.folderPath + rec.name + "\\" + DateTime.Now.ToString().Replace(':', '.');
                 Directory.CreateDirectory(dir);
                 foreach (FileAndDirInfo fi in rec.filesAndDirs)
@@ -303,6 +304,7 @@ namespace FtpBackupProject
                             if (rec.ftpClient.FileExists(pathOnFtp))
                             {
                                 rec.ftpClient.DownloadFile(dirTemp, pathOnFtp);
+                                size += rec.ftpClient.GetFileSize(pathOnFtp);
                             }
                             else
                             {
@@ -312,6 +314,44 @@ namespace FtpBackupProject
                         catch
                         {
                             SaveClass.WriteToLogFile("Ошибка скачивания из - за перебоя с интернет соединением. Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
+                        }
+                        //Размеры и перезапись господи спаси:
+                        try
+                        {
+                            try
+                            {
+                                StreamWriter sw1 = new StreamWriter(dir + "\\size");
+                                sw1.WriteLine(size.ToString());
+                                sw1.Close();
+                            }
+                            catch
+                            {
+                                SaveClass.WriteToLogFile("Ошибка определения размера файлов бэкапа или же записи их в файл.");
+                            }
+                            StreamReader sr;
+                            try
+                            {
+                                sr = new StreamReader(rec.folderPath + rec.name + "\\size");
+                            }
+                            catch
+                            {
+                                StreamWriter sw2 = new StreamWriter(rec.folderPath + rec.name + "\\size");
+                                sw2.Write("0");
+                                sw2.Close();
+                                sr = new StreamReader(rec.folderPath + rec.name + "\\size");
+                            }
+                            long tempSize = Convert.ToInt64(sr.ReadToEnd());
+                            sr.Close();
+                            tempSize += size;
+                            StreamWriter sw3 = new StreamWriter(rec.folderPath + rec.name + "\\size");
+                            sw3.Write(tempSize.ToString());
+                            sw3.Close();
+                            //Проверка размерности и удаление папок:
+                            
+                        }
+                        catch
+                        {
+                            SaveClass.WriteToLogFile("Ошибка доступа к файлам size.");
                         }
                     }
                 }
@@ -324,54 +364,6 @@ namespace FtpBackupProject
                 rec.ftpClient.Disconnect();
                 return false;
             }
-            
-            
-        }
-
-        public static async void Download(Record rec, AddControllerForm acf)
-        {
-            string pathOnFtp = "";
-            string dir = rec.folderPath + rec.name + "\\" + DateTime.Now.ToString().Replace(':', '.');
-            Directory.CreateDirectory(dir);
-            await Task.Run(() =>
-            {
-                foreach(FileAndDirInfo fi in rec.filesAndDirs)
-                {
-                    pathOnFtp = "";
-                    string dirTemp = dir;
-                    foreach(string partPath in fi.pathParts)
-                    {
-                        pathOnFtp += "/" + partPath;
-                        dirTemp += "\\" + partPath;
-                    }
-                    if (pathOnFtp.Equals("")) pathOnFtp = "/";
-                    if (fi.isFolder)
-                    {
-                        if (rec.ftpClient.DirectoryExists(pathOnFtp))
-                        {
-                            rec.ftpClient.DownloadDirectory(dirTemp, pathOnFtp, FtpFolderSyncMode.Update);
-                        }
-                        else
-                        {
-                            SaveClass.WriteToLogFile("Директория не найдена: " + pathOnFtp + " Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
-                        }
-
-                    }
-                    else
-                    {
-                        if (rec.ftpClient.FileExists(pathOnFtp))
-                        {
-                            rec.ftpClient.DownloadFile(dirTemp, pathOnFtp);
-                        }
-                        else
-                        {
-                            SaveClass.WriteToLogFile("Файл не найден: " + pathOnFtp + " Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port.ToString());
-                        }
-                    }
-                }
-            });
-            rec.ftpClient.Disconnect();
-            acf.Close();
         }
 
         public static async void getAllFilesAndDirs(Record rec, AddControllerForm acf)

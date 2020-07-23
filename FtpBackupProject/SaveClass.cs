@@ -32,13 +32,28 @@ namespace FtpBackupProject
                 if (messages == null) messages = new Queue<LogInfo>();
                 try
                 {
+                    bool isExist = File.Exists("Log.txt");
                     StreamWriter swLOG = new StreamWriter("Log.txt", true);
                     while (messages.Count > 0)
                     {
                         LogInfo li = messages.Dequeue();
-                        swLOG.Write("[" + li.date.ToString() + "]: " + li.mes + "\r\n");
+                        if(li.mes.Equals("Программа запущена.") && isExist)
+                        {
+                            swLOG.Write("\r\n[" + li.date.ToString() + "]: " + li.mes + "\r\n");
+                        }
+                        else
+                        {
+                            swLOG.Write("[" + li.date.ToString() + "]: " + li.mes + "\r\n");
+                        }
                     }
-                    swLOG.Write("[" + DateTime.Now.ToString() + "]: " + message + "\r\n");
+                    if(message.Equals("Программа запущена.") && isExist)
+                    {
+                        swLOG.Write("\r\n[" + DateTime.Now.ToString() + "]: " + message + "\r\n");
+                    }
+                    else
+                    {
+                        swLOG.Write("[" + DateTime.Now.ToString() + "]: " + message + "\r\n");
+                    }
                     swLOG.Close();
                 }
                 catch

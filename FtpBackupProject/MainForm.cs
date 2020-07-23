@@ -47,7 +47,7 @@ namespace FtpBackupProject
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            SaveClass.WriteToLogFile("Остановка второго потока. Сохранение данных. Закрытие программы.\r\n");
+            SaveClass.WriteToLogFile("Остановка второго потока. Сохранение данных. Закрытие программы.");
             SaveClass.SaveAll();
             autoDownload.Abort();
         }
@@ -70,6 +70,7 @@ namespace FtpBackupProject
                 labelStatus.Text = "";
                 label4.Text = "Следующее сохранение в " + rec.nextSaveDateTime.ToString();
                 label5.Text = rec.login + "@" + rec.IP + ":" + rec.port.ToString();
+                textBoxMaxSize.Text = ((rec.maxFilesSize / 1024) / 1024).ToString();
             }
         }
 
@@ -185,6 +186,7 @@ namespace FtpBackupProject
             button5.Enabled = !isBlocked;
             button6.Enabled = !isBlocked;
             button7.Enabled = !isBlocked;
+            button9.Enabled = !isBlocked;
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -236,6 +238,24 @@ namespace FtpBackupProject
         private void button8_Click(object sender, EventArgs e)
         {
             new LogSettings().Show();
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            long size = 0;
+            try
+            {
+                size = Convert.ToInt64(textBoxMaxSize.Text);
+                if (size <= 0) throw new Exception(); ;
+            }
+            catch
+            {
+                SetStatus("Некорректное значение максимального размера папки!", Color.Red);
+                SaveClass.WriteToLogFile("Неудачная попытка изменить максимальный размер папки. Введено: \"" + textBoxMaxSize.Text + "\". Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port + ".");
+                return;
+            }
+            SaveClass.WriteToLogFile("Изменён максимальный размер папки. " + "(" + ((rec.maxFilesSize/1024)/1024).ToString() + " -> " + textBoxMaxSize.Text +") Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port + ".");
+            rec.maxFilesSize = size * 1024 * 1024;
         }
     }
 }

@@ -60,6 +60,10 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.button8 = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textBoxMaxSize = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.button9 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -98,6 +102,10 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button9);
+            this.panel1.Controls.Add(this.label7);
+            this.panel1.Controls.Add(this.textBoxMaxSize);
+            this.panel1.Controls.Add(this.label6);
             this.panel1.Controls.Add(this.button7);
             this.panel1.Controls.Add(this.button6);
             this.panel1.Controls.Add(this.label5);
@@ -161,9 +169,9 @@
             // button5
             // 
             this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button5.Location = new System.Drawing.Point(391, 347);
+            this.button5.Location = new System.Drawing.Point(239, 347);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(295, 35);
+            this.button5.Size = new System.Drawing.Size(198, 52);
             this.button5.TabIndex = 30;
             this.button5.Text = "Сделать копию сейчас";
             this.button5.UseVisualStyleBackColor = true;
@@ -387,6 +395,50 @@
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label6.Location = new System.Drawing.Point(523, 249);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(177, 48);
+            this.label6.TabIndex = 34;
+            this.label6.Text = "Максимальный размер\r\nпапки с копиями\r\nбез перезаписи";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // textBoxMaxSize
+            // 
+            this.textBoxMaxSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBoxMaxSize.Location = new System.Drawing.Point(568, 304);
+            this.textBoxMaxSize.MaxLength = 10;
+            this.textBoxMaxSize.Name = "textBoxMaxSize";
+            this.textBoxMaxSize.Size = new System.Drawing.Size(83, 20);
+            this.textBoxMaxSize.TabIndex = 35;
+            this.textBoxMaxSize.Text = "0000000000";
+            this.textBoxMaxSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label7.Location = new System.Drawing.Point(657, 305);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(30, 16);
+            this.label7.TabIndex = 36;
+            this.label7.Text = "МБ";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // button9
+            // 
+            this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button9.Location = new System.Drawing.Point(463, 347);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(237, 52);
+            this.button9.TabIndex = 37;
+            this.button9.Text = "Сохранить новый максимальный размер";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -445,6 +497,10 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox textBoxMaxSize;
+        private System.Windows.Forms.Label label6;
     }
 }
 

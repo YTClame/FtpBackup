@@ -34,6 +34,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button9 = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.textBoxMaxSize = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
@@ -60,10 +64,6 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.button8 = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.textBoxMaxSize = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.button9 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -132,6 +132,50 @@
             this.panel1.Size = new System.Drawing.Size(715, 429);
             this.panel1.TabIndex = 4;
             this.panel1.Visible = false;
+            // 
+            // button9
+            // 
+            this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button9.Location = new System.Drawing.Point(463, 347);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(237, 52);
+            this.button9.TabIndex = 37;
+            this.button9.Text = "Сохранить новый максимальный размер";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label7.Location = new System.Drawing.Point(657, 305);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(30, 16);
+            this.label7.TabIndex = 36;
+            this.label7.Text = "МБ";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // textBoxMaxSize
+            // 
+            this.textBoxMaxSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBoxMaxSize.Location = new System.Drawing.Point(568, 304);
+            this.textBoxMaxSize.MaxLength = 10;
+            this.textBoxMaxSize.Name = "textBoxMaxSize";
+            this.textBoxMaxSize.Size = new System.Drawing.Size(83, 20);
+            this.textBoxMaxSize.TabIndex = 35;
+            this.textBoxMaxSize.Text = "0000000000";
+            this.textBoxMaxSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label6.Location = new System.Drawing.Point(523, 249);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(177, 48);
+            this.label6.TabIndex = 34;
+            this.label6.Text = "Максимальный размер\r\nпапки с копиями\r\nбез перезаписи";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // button7
             // 
@@ -395,50 +439,6 @@
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label6.Location = new System.Drawing.Point(523, 249);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(177, 48);
-            this.label6.TabIndex = 34;
-            this.label6.Text = "Максимальный размер\r\nпапки с копиями\r\nбез перезаписи";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // textBoxMaxSize
-            // 
-            this.textBoxMaxSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBoxMaxSize.Location = new System.Drawing.Point(568, 304);
-            this.textBoxMaxSize.MaxLength = 10;
-            this.textBoxMaxSize.Name = "textBoxMaxSize";
-            this.textBoxMaxSize.Size = new System.Drawing.Size(83, 20);
-            this.textBoxMaxSize.TabIndex = 35;
-            this.textBoxMaxSize.Text = "0000000000";
-            this.textBoxMaxSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label7.Location = new System.Drawing.Point(657, 305);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(30, 16);
-            this.label7.TabIndex = 36;
-            this.label7.Text = "МБ";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // button9
-            // 
-            this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button9.Location = new System.Drawing.Point(463, 347);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(237, 52);
-            this.button9.TabIndex = 37;
-            this.button9.Text = "Сохранить новый максимальный размер";
-            this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -454,7 +454,7 @@
             this.MaximumSize = new System.Drawing.Size(960, 480);
             this.MinimumSize = new System.Drawing.Size(960, 480);
             this.Name = "MainForm";
-            this.Text = "FTP Backup Release v1.2";
+            this.Text = "FTP Backup Release v1.3";
             this.Activated += new System.EventHandler(this.MainForm_Activated);
             this.Deactivate += new System.EventHandler(this.MainForm_Deactivate);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);

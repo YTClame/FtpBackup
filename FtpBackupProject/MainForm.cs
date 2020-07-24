@@ -254,6 +254,7 @@ namespace FtpBackupProject
                 SaveClass.WriteToLogFile("Неудачная попытка изменить максимальный размер папки. Введено: \"" + textBoxMaxSize.Text + "\". Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port + ".");
                 return;
             }
+            SetStatus("Новый максимальный размер сохранён!", Color.DarkGreen);
             SaveClass.WriteToLogFile("Изменён максимальный размер папки. " + "(" + ((rec.maxFilesSize/1024)/1024).ToString() + " -> " + textBoxMaxSize.Text +") Контроллер: " + rec.name + ": " + rec.login + "@" + rec.IP + ":" + rec.port + ".");
             rec.maxFilesSize = size * 1024 * 1024;
         }

@@ -262,10 +262,11 @@ namespace FtpBackupProject
         public static bool DownloadLocal(Record rec)
         {
             string pathOnFtp = "";
+            DateTime now = DateTime.Now;
             try
             {
                 long size = 0;
-                string dir = rec.folderPath + rec.name + "\\" + DateTime.Now.ToString().Replace(':', '.');
+                string dir = rec.folderPath + rec.name + "\\" + now.ToString().Replace(':', '.');
                 Directory.CreateDirectory(dir);
                 foreach (FileAndDirInfo fi in rec.filesAndDirs)
                 {
@@ -325,9 +326,20 @@ namespace FtpBackupProject
                 //Размеры и перезапись господи спаси:
                 try
                 {
+                    string direct = "";
                     try
                     {
-                        StreamWriter sw1 = new StreamWriter(dir + "\\size");
+                        direct = Environment.CurrentDirectory + "\\sizesInfo\\" + rec.name + "\\";
+                        if (!Directory.Exists(direct)) Directory.CreateDirectory(direct);
+                    }
+                    catch
+                    {
+
+                    }
+                    try
+                    {
+                        if (!Directory.Exists(direct + now.ToString().Replace(':', '.'))) Directory.CreateDirectory(direct + now.ToString().Replace(':', '.'));
+                        StreamWriter sw1 = new StreamWriter(direct + now.ToString().Replace(':', '.') + "\\size");
                         sw1.WriteLine(size.ToString());
                         sw1.Close();
                     }
@@ -338,39 +350,44 @@ namespace FtpBackupProject
                     StreamReader sr;
                     try
                     {
-                        sr = new StreamReader(rec.folderPath + rec.name + "\\size");
+                        sr = new StreamReader(direct + "\\size");
                     }
                     catch
                     {
-                        StreamWriter sw2 = new StreamWriter(rec.folderPath + rec.name + "\\size");
+                        StreamWriter sw2 = new StreamWriter(direct + "\\size");
                         sw2.Write("0");
                         sw2.Close();
-                        sr = new StreamReader(rec.folderPath + rec.name + "\\size");
+                        sr = new StreamReader(direct + "\\size");
                     }
                     long tempSize = Convert.ToInt64(sr.ReadToEnd());
                     sr.Close();
                     tempSize += size;
-                    StreamWriter sw3 = new StreamWriter(rec.folderPath + rec.name + "\\size");
+                    StreamWriter sw3 = new StreamWriter(direct + "\\size");
                     sw3.Write(tempSize.ToString());
                     sw3.Close();
                     //Проверка размерности и удаление папок:
+                    
                     while (tempSize >= rec.maxFilesSize)
                     {
                         string[] allfolders = Directory.GetDirectories(rec.folderPath + rec.name + "\\");
-                        if (allfolders.Length > 0)
+                        string[] allfoldersSIZES = Directory.GetDirectories(direct);
+                        if (allfoldersSIZES.Length > 0)
                         {
-                            StreamReader sr2 = new StreamReader(allfolders[0] + "\\size");
+                            StreamReader sr2 = new StreamReader(allfoldersSIZES[0] + "\\size");
                             long tempS = Convert.ToInt64(sr2.ReadToEnd());
                             sr2.Close();
                             Directory.Delete(allfolders[0], true);
+                            Directory.Delete(allfoldersSIZES[0], true);
                             SaveClass.WriteToLogFile("Удалена папка: " + allfolders[0] + " из-за превышения допустимого размера папки бэкапов контроллера. (" + ((tempSize/1024)/1024).ToString() + " -> " + (((tempSize - tempS) / 1024) / 1024).ToString() + ") / " + ((rec.maxFilesSize/1024)/1024).ToString() + " (МБ).");
-                            StreamWriter sw4 = new StreamWriter(rec.folderPath + rec.name + "\\size");
+                            StreamWriter sw4 = new StreamWriter(direct + "size");
                             tempSize -= tempS;
                             sw4.Write(tempSize.ToString());
                             sw4.Close();
                             allfolders = Directory.GetDirectories(rec.folderPath + rec.name + "\\");
+                            allfoldersSIZES = Directory.GetDirectories(direct);
                         }
                     }
+                    
                 }
                 catch
                 {
